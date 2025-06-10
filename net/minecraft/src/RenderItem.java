@@ -134,6 +134,40 @@ public class RenderItem extends Render {
 		}
 	}
 
+	public void renderItemIntoGUIAlpha(FontRenderer var1, RenderEngine var2, ItemStack var3, int var4, int var5, float alpha) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, alpha);
+		if(var3 != null) {
+			if(var3.itemID < 256 && RenderBlocks.func_1219_a(Block.blocksList[var3.itemID].getRenderType())) {
+				int var6 = var3.itemID;
+				var2.bindTexture(var2.getTexture("/terrain.png"));
+				Block var7 = Block.blocksList[var6];
+				GL11.glPushMatrix();
+				GL11.glTranslatef((float)(var4 - 2), (float)(var5 + 3), 0.0F);
+				GL11.glScalef(10.0F, 10.0F, 10.0F);
+				GL11.glTranslatef(1.0F, 0.5F, 8.0F);
+				GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
+				GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+				GL11.glScalef(1.0F, 1.0F, 1.0F);
+				this.renderBlocks.func_1227_a(var7);
+				GL11.glPopMatrix();
+			} else if(var3.getIconIndex() >= 0) {
+				GL11.glDisable(GL11.GL_LIGHTING);
+				if(var3.itemID < 256) {
+					var2.bindTexture(var2.getTexture("/terrain.png"));
+				} else {
+					var2.bindTexture(var2.getTexture("/gui/items.png"));
+				}
+
+				this.renderTexturedQuad(var4, var5, var3.getIconIndex() % 16 * 16, var3.getIconIndex() / 16 * 16, 16, 16);
+				GL11.glEnable(GL11.GL_LIGHTING);
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+		}
+	}
+
 	public void renderItemOverlayIntoGUI(FontRenderer var1, RenderEngine var2, ItemStack var3, int var4, int var5) {
 		if(var3 != null) {
 			if(var3.stackSize > 1) {
@@ -166,9 +200,58 @@ public class RenderItem extends Render {
 		}
 	}
 
+	public void renderItemOverlayIntoGUIAlpha(FontRenderer var1, RenderEngine var2, ItemStack var3, int var4, int var5, float alpha) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, alpha);
+		if(var3 != null) {
+			if(var3.stackSize > 1) {
+				String var6 = "" + var3.stackSize;
+				GL11.glDisable(GL11.GL_LIGHTING);
+				GL11.glDisable(GL11.GL_DEPTH_TEST);
+				var1.drawStringWithShadowAlpha(var6, var4 + 19 - 2 - var1.getStringWidth(var6), var5 + 6 + 3, 16777215, alpha);
+				GL11.glEnable(GL11.GL_LIGHTING);
+				GL11.glEnable(GL11.GL_DEPTH_TEST);
+			}
+
+			if(var3.itemDamage > 0) {
+				int var11 = 13 - var3.itemDamage * 13 / var3.getMaxDamage();
+				int var7 = 255 - var3.itemDamage * 255 / var3.getMaxDamage();
+				GL11.glDisable(GL11.GL_LIGHTING);
+				GL11.glDisable(GL11.GL_DEPTH_TEST);
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				Tessellator var8 = Tessellator.instance;
+				int var9 = 255 - var7 << 16 | var7 << 8;
+				int var10 = (255 - var7) / 4 << 16 | 16128;
+				this.renderQuadAlpha(var8, var4 + 2, var5 + 13, 13, 2, 0, alpha);
+				this.renderQuadAlpha(var8, var4 + 2, var5 + 13, var11, 1, var9, alpha);
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GL11.glEnable(GL11.GL_LIGHTING);
+				GL11.glEnable(GL11.GL_DEPTH_TEST);
+			}
+
+		}
+	}
+
 	private void renderQuad(Tessellator var1, int var2, int var3, int var4, int var5, int var6) {
 		var1.startDrawingQuads();
 		var1.setColorOpaque_I(var6);
+		var1.addVertex((double)(var2 + 0), (double)(var3 + 0), 0.0D);
+		var1.addVertex((double)(var2 + 0), (double)(var3 + var5), 0.0D);
+		var1.addVertex((double)(var2 + var4), (double)(var3 + var5), 0.0D);
+		var1.addVertex((double)(var2 + var4), (double)(var3 + 0), 0.0D);
+		var1.draw();
+	}
+
+	private void renderQuadAlpha(Tessellator var1, int var2, int var3, int var4, int var5, int var6, float alpha) {
+		var1.startDrawingQuads();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		if(var6 == 0) {
+			GL11.glColor4f(0.0F, 0.0F, 0.0F, alpha);
+		} else {
+			GL11.glColor4f(0.0F, 1.0F, 0.0F, alpha);
+		}
 		var1.addVertex((double)(var2 + 0), (double)(var3 + 0), 0.0D);
 		var1.addVertex((double)(var2 + 0), (double)(var3 + var5), 0.0D);
 		var1.addVertex((double)(var2 + var4), (double)(var3 + var5), 0.0D);

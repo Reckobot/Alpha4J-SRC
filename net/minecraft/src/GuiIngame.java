@@ -21,6 +21,8 @@ public class GuiIngame extends Gui {
 	public float field_6446_b;
 	float field_931_c = 1.0F;
 
+	public float opacity = 0.0F;
+
 	public GuiIngame(Minecraft var1) {
 		this.mc = var1;
 	}
@@ -46,17 +48,17 @@ public class GuiIngame extends Gui {
 			this.func_4065_b(var10, var6, var7);
 		}
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, this.opacity);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/gui.png"));
 		InventoryPlayer var11 = this.mc.thePlayer.inventory;
 		this.zLevel = -90.0F;
-		this.drawTexturedModalRect(var6 / 2 - 91, var7 - 22, 0, 0, 182, 22);
-		this.drawTexturedModalRect(var6 / 2 - 91 - 1 + var11.currentItem * 20, var7 - 22 - 1, 0, 22, 24, 22);
+		this.drawTexturedModalRect(var6 / 2 - 91, var7 - 22 - (int)(this.mc.gameSettings.offset*100), 0, 0, 182, 22);
+		this.drawTexturedModalRect(var6 / 2 - 91 - 1 + var11.currentItem * 20, var7 - 22 - 1 - (int)(this.mc.gameSettings.offset*100), 0, 22, 24, 22);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/icons.png"));
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR);
 		this.drawTexturedModalRect(var6 / 2 - 7, var7 / 2 - 7, 0, 0, 16, 16);
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		boolean var12 = this.mc.thePlayer.field_9306_bj / 3 % 2 == 1;
 		if(this.mc.thePlayer.field_9306_bj < 10) {
 			var12 = false;
@@ -77,15 +79,15 @@ public class GuiIngame extends Gui {
 				if(var15 > 0) {
 					var18 = var6 / 2 + 91 - var16 * 8 - 9;
 					if(var16 * 2 + 1 < var15) {
-						this.drawTexturedModalRect(var18, var17, 34, 9, 9, 9);
+						this.drawTexturedModalRect(var18, var17 - (int)(this.mc.gameSettings.offset*100), 34, 9, 9, 9);
 					}
 
 					if(var16 * 2 + 1 == var15) {
-						this.drawTexturedModalRect(var18, var17, 25, 9, 9, 9);
+						this.drawTexturedModalRect(var18, var17 - (int)(this.mc.gameSettings.offset*100), 25, 9, 9, 9);
 					}
 
 					if(var16 * 2 + 1 > var15) {
-						this.drawTexturedModalRect(var18, var17, 16, 9, 9, 9);
+						this.drawTexturedModalRect(var18, var17 - (int)(this.mc.gameSettings.offset*100), 16, 9, 9, 9);
 					}
 				}
 
@@ -99,23 +101,23 @@ public class GuiIngame extends Gui {
 					var17 += this.rand.nextInt(2);
 				}
 
-				this.drawTexturedModalRect(var19, var17, 16 + var27 * 9, 0, 9, 9);
+				this.drawTexturedModalRect(var19, var17 - (int)(this.mc.gameSettings.offset*100), 16 + var27 * 9, 0, 9, 9);
 				if(var12) {
 					if(var16 * 2 + 1 < var14) {
-						this.drawTexturedModalRect(var19, var17, 70, 0, 9, 9);
+						this.drawTexturedModalRect(var19, var17 - (int)(this.mc.gameSettings.offset*100), 70, 0, 9, 9);
 					}
 
 					if(var16 * 2 + 1 == var14) {
-						this.drawTexturedModalRect(var19, var17, 79, 0, 9, 9);
+						this.drawTexturedModalRect(var19, var17 - (int)(this.mc.gameSettings.offset*100), 79, 0, 9, 9);
 					}
 				}
 
 				if(var16 * 2 + 1 < var13) {
-					this.drawTexturedModalRect(var19, var17, 52, 0, 9, 9);
+					this.drawTexturedModalRect(var19, var17 - (int)(this.mc.gameSettings.offset*100), 52, 0, 9, 9);
 				}
 
 				if(var16 * 2 + 1 == var13) {
-					this.drawTexturedModalRect(var19, var17, 61, 0, 9, 9);
+					this.drawTexturedModalRect(var19, var17 - (int)(this.mc.gameSettings.offset*100), 61, 0, 9, 9);
 				}
 			}
 
@@ -125,9 +127,9 @@ public class GuiIngame extends Gui {
 
 				for(var18 = 0; var18 < var16 + var17; ++var18) {
 					if(var18 < var16) {
-						this.drawTexturedModalRect(var6 / 2 - 91 + var18 * 8, var7 - 32 - 9, 16, 18, 9, 9);
+						this.drawTexturedModalRect(var6 / 2 - 91 + var18 * 8, var7 - 32 - 9 - (int)(this.mc.gameSettings.offset*100), 16, 18, 9, 9);
 					} else {
-						this.drawTexturedModalRect(var6 / 2 - 91 + var18 * 8, var7 - 32 - 9, 25, 18, 9, 9);
+						this.drawTexturedModalRect(var6 / 2 - 91 + var18 * 8, var7 - 32 - 9 - (int)(this.mc.gameSettings.offset*100), 25, 18, 9, 9);
 					}
 				}
 			}
@@ -165,7 +167,7 @@ public class GuiIngame extends Gui {
 			this.drawString(var8, "x: " + this.mc.thePlayer.posX, 2, 64, 14737632);
 			this.drawString(var8, "y: " + this.mc.thePlayer.posY, 2, 72, 14737632);
 			this.drawString(var8, "z: " + this.mc.thePlayer.posZ, 2, 80, 14737632);
-		} else {
+		} else if (this.mc.gameSettings.watermark) {
 			var8.drawStringWithShadow("Minecraft Alpha v1.2.6", 2, 2, 16777215);
 		}
 
@@ -324,12 +326,12 @@ public class GuiIngame extends Gui {
 				GL11.glTranslatef((float)(-(var2 + 8)), (float)(-(var3 + 12)), 0.0F);
 			}
 
-			itemRenderer.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, var5, var2, var3);
+			itemRenderer.renderItemIntoGUIAlpha(this.mc.fontRenderer, this.mc.renderEngine, var5, var2, var3 - (int)(this.mc.gameSettings.offset*100), this.opacity);
 			if(var6 > 0.0F) {
 				GL11.glPopMatrix();
 			}
 
-			itemRenderer.renderItemOverlayIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, var5, var2, var3);
+			itemRenderer.renderItemOverlayIntoGUIAlpha(this.mc.fontRenderer, this.mc.renderEngine, var5, var2, var3 - (int)(this.mc.gameSettings.offset*100), this.opacity);
 		}
 	}
 
@@ -339,6 +341,11 @@ public class GuiIngame extends Gui {
 		}
 
 		++this.updateCounter;
+
+		this.opacity -= 1/20F;
+		if(this.opacity < this.mc.gameSettings.opacity) {
+			this.opacity = this.mc.gameSettings.opacity;
+		}
 
 		for(int var1 = 0; var1 < this.chatMessageList.size(); ++var1) {
 			++((ChatLine)this.chatMessageList.get(var1)).updateCounter;

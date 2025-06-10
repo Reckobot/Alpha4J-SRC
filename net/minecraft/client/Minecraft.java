@@ -8,69 +8,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.io.File;
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.Block;
-import net.minecraft.src.EffectRenderer;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntityPlayerSP;
-import net.minecraft.src.EntityRenderer;
-import net.minecraft.src.EnumOS2;
-import net.minecraft.src.EnumOSMappingHelper;
-import net.minecraft.src.FontRenderer;
-import net.minecraft.src.GLAllocation;
-import net.minecraft.src.GameSettings;
-import net.minecraft.src.GameWindowListener;
-import net.minecraft.src.GuiChat;
-import net.minecraft.src.GuiConflictWarning;
-import net.minecraft.src.GuiConnecting;
-import net.minecraft.src.GuiGameOver;
-import net.minecraft.src.GuiIngame;
-import net.minecraft.src.GuiIngameMenu;
-import net.minecraft.src.GuiInventory;
-import net.minecraft.src.GuiMainMenu;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.GuiUnused;
-import net.minecraft.src.ItemRenderer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.LoadingScreenRenderer;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.MinecraftError;
-import net.minecraft.src.MinecraftException;
-import net.minecraft.src.MinecraftImpl;
-import net.minecraft.src.ModelBiped;
-import net.minecraft.src.MouseHelper;
-import net.minecraft.src.MovementInputFromOptions;
-import net.minecraft.src.MovingObjectPosition;
-import net.minecraft.src.OpenGlCapsChecker;
-import net.minecraft.src.PlayerController;
-import net.minecraft.src.PlayerControllerTest;
-import net.minecraft.src.RenderEngine;
-import net.minecraft.src.RenderGlobal;
-import net.minecraft.src.RenderManager;
-import net.minecraft.src.ScaledResolution;
-import net.minecraft.src.ScreenShotHelper;
-import net.minecraft.src.Session;
-import net.minecraft.src.SoundManager;
-import net.minecraft.src.Teleporter;
-import net.minecraft.src.Tessellator;
-import net.minecraft.src.TextureCompassFX;
-import net.minecraft.src.TextureFlamesFX;
-import net.minecraft.src.TextureLavaFX;
-import net.minecraft.src.TextureLavaFlowFX;
-import net.minecraft.src.TexturePackList;
-import net.minecraft.src.TexturePortalFX;
-import net.minecraft.src.TextureWatchFX;
-import net.minecraft.src.TextureWaterFX;
-import net.minecraft.src.TexureWaterFlowFX;
-import net.minecraft.src.ThreadDownloadResources;
-import net.minecraft.src.ThreadSleepForever;
-import net.minecraft.src.Timer;
-import net.minecraft.src.UnexpectedThrowable;
-import net.minecraft.src.Vec3D;
-import net.minecraft.src.World;
-import net.minecraft.src.WorldProvider;
-import net.minecraft.src.WorldProviderHell;
-import net.minecraft.src.WorldRenderer;
+
+import net.minecraft.src.*;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
@@ -79,6 +18,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+
+import static org.lwjgl.opengl.GL14.glBlendColor;
 
 public abstract class Minecraft implements Runnable {
 	public PlayerController field_6327_b;
@@ -418,6 +359,32 @@ public abstract class Minecraft implements Runnable {
 		System.gc();
 	}
 
+	public void gammaOverlay() {
+		RenderHelper.disableStandardItemLighting();
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(false);
+		float gamma = this.gameSettings.gamma*0.6F/3F;
+
+		glBlendColor(1.0F, 1.0F, 1.0F, 0.1F);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_COLOR, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
+		GL11.glColor4f(gamma, gamma, gamma, this.gameSettings.gamma);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		Tessellator tess = Tessellator.instance;
+		tess.startDrawingQuads();
+		tess.addVertexWithUV(0.0D, (double)this.displayHeight, -90.0D, 0.0D, 1.0D);
+		tess.addVertexWithUV((double)this.displayWidth, (double)this.displayHeight, -90.0D, 1.0D, 1.0D);
+		tess.addVertexWithUV((double)this.displayWidth, 0.0D, -90.0D, 1.0D, 0.0D);
+		tess.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+		tess.draw();
+
+
+		GL11.glDepthMask(true);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	public void run() {
 		this.running = true;
 
@@ -479,6 +446,8 @@ public abstract class Minecraft implements Runnable {
 					if(this.gameSettings.limitFramerate) {
 						Thread.sleep(5L);
 					}
+
+					this.gammaOverlay();
 
 					if(!Keyboard.isKeyDown(Keyboard.KEY_F7)) {
 						Display.update();
@@ -957,6 +926,7 @@ public abstract class Minecraft implements Runnable {
 						int var3 = Mouse.getEventDWheel();
 						if(var3 != 0) {
 							this.thePlayer.inventory.changeCurrentItem(var3);
+							this.ingameGUI.opacity = 4.0F;
 						}
 
 						if(this.currentScreen == null) {

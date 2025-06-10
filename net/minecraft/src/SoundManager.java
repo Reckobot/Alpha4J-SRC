@@ -83,6 +83,18 @@ public class SoundManager {
 		this.soundPoolMusic.addSound(var1, var2);
 	}
 
+	public void playMusic() {
+		if(!sndSystem.playing("BgMusic") && !sndSystem.playing("streaming")) {
+			SoundPoolEntry var1 = this.soundPoolMusic.getRandomSound();
+			if(var1 != null) {
+				this.field_583_i = this.rand.nextInt(12000) + 12000;
+				sndSystem.backgroundMusic("BgMusic", var1.soundUrl, var1.soundName, false);
+				sndSystem.setVolume("BgMusic", this.options.musicVolume);
+				sndSystem.play("BgMusic");
+			}
+		}
+	}
+
 	public void func_4033_c() {
 		if(loaded && this.options.musicVolume != 0.0F) {
 			if(!sndSystem.playing("BgMusic") && !sndSystem.playing("streaming")) {

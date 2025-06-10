@@ -117,8 +117,17 @@ public class FontRenderer {
 		this.drawString(var1, var2, var3, var4);
 	}
 
+	public void drawStringWithShadowAlpha(String var1, int var2, int var3, int var4, float alpha) {
+		this.renderStringAlpha(var1, var2 + 1, var3 + 1, var4, true, alpha);
+		this.drawStringAlpha(var1, var2, var3, var4, alpha);
+	}
+
 	public void drawString(String var1, int var2, int var3, int var4) {
 		this.renderString(var1, var2, var3, var4, false);
+	}
+
+	public void drawStringAlpha(String var1, int var2, int var3, int var4, float alpha) {
+		this.renderStringAlpha(var1, var2, var3, var4, false, alpha);
 	}
 
 	public void renderString(String var1, int var2, int var3, int var4, boolean var5) {
@@ -140,6 +149,65 @@ public class FontRenderer {
 			}
 
 			GL11.glColor4f(var10, var7, var8, var9);
+			this.buffer.clear();
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float)var2, (float)var3, 0.0F);
+
+			for(var6 = 0; var6 < var1.length(); ++var6) {
+				int var11;
+				for(; var1.charAt(var6) == 167 && var1.length() > var6 + 1; var6 += 2) {
+					var11 = "0123456789abcdef".indexOf(var1.toLowerCase().charAt(var6 + 1));
+					if(var11 < 0 || var11 > 15) {
+						var11 = 15;
+					}
+
+					this.buffer.put(this.field_1310_c + 256 + var11 + (var5 ? 16 : 0));
+					if(this.buffer.remaining() == 0) {
+						this.buffer.flip();
+						GL11.glCallLists(this.buffer);
+						this.buffer.clear();
+					}
+				}
+
+				var11 = " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\'abcdefghijklmnopqrstuvwxyz{|}~\u2302\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb".indexOf(var1.charAt(var6));
+				if(var11 >= 0) {
+					this.buffer.put(this.field_1310_c + var11 + 32);
+				}
+
+				if(this.buffer.remaining() == 0) {
+					this.buffer.flip();
+					GL11.glCallLists(this.buffer);
+					this.buffer.clear();
+				}
+			}
+
+			this.buffer.flip();
+			GL11.glCallLists(this.buffer);
+			GL11.glPopMatrix();
+		}
+	}
+
+	public void renderStringAlpha(String var1, int var2, int var3, int var4, boolean var5, float alpha) {
+		if(var1 != null) {
+			int var6;
+			if(var5) {
+				var6 = var4 & -16777216;
+				var4 = (var4 & 16579836) >> 2;
+				var4 += var6;
+			}
+
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.field_1308_a);
+			float var10 = (float)(var4 >> 16 & 255) / 255.0F;
+			float var7 = (float)(var4 >> 8 & 255) / 255.0F;
+			float var8 = (float)(var4 & 255) / 255.0F;
+			float var9 = (float)(var4 >> 24 & 255) / 255.0F;
+			if(var9 == 0.0F) {
+				var9 = 1.0F;
+			}
+
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glColor4f(var10, var7, var8, alpha);
 			this.buffer.clear();
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float)var2, (float)var3, 0.0F);

@@ -1534,10 +1534,10 @@ public class World implements IBlockAccess {
 		} else {
 			++this.field_4204_J;
 
-			boolean var2;
 			try {
 				int var1 = 5000;
 
+				boolean var2;
 				while(this.field_1051_z.size() > 0) {
 					--var1;
 					if(var1 <= 0) {
@@ -1549,11 +1549,10 @@ public class World implements IBlockAccess {
 				}
 
 				var2 = false;
+				return var2;
 			} finally {
 				--this.field_4204_J;
 			}
-
-			return var2;
 		}
 	}
 

@@ -26,7 +26,7 @@ public class GameSettings {
 	public KeyBinding keyBindBack = new KeyBinding("Back", 31);
 	public KeyBinding keyBindRight = new KeyBinding("Right", 32);
 	public KeyBinding keyBindJump = new KeyBinding("Jump", 57);
-	public KeyBinding keyBindInventory = new KeyBinding("Inventory", 23);
+	public KeyBinding keyBindInventory = new KeyBinding("Inventory", 18);
 	public KeyBinding keyBindDrop = new KeyBinding("Drop", 16);
 	public KeyBinding keyBindChat = new KeyBinding("Chat", 20);
 	public KeyBinding keyBindToggleFog = new KeyBinding("Toggle fog", 33);
@@ -34,10 +34,15 @@ public class GameSettings {
 	public KeyBinding[] keyBindings = new KeyBinding[]{this.keyBindForward, this.keyBindLeft, this.keyBindBack, this.keyBindRight, this.keyBindJump, this.keyBindSneak, this.keyBindDrop, this.keyBindInventory, this.keyBindChat, this.keyBindToggleFog};
 	protected Minecraft mc;
 	private File optionsFile;
-	public int numberOfOptions = 10;
+	public int numberOfOptions = 14;
 	public int difficulty = 2;
 	public boolean thirdPersonView = false;
 	public String field_12259_z = "";
+
+	public float gamma = 1.0F;
+	public float opacity = 0.5F;
+	public float offset = 0.20F;
+	public boolean watermark = false;
 
 	public GameSettings(Minecraft var1, File var2) {
 		this.mc = var1;
@@ -70,6 +75,18 @@ public class GameSettings {
 
 		if(var1 == 3) {
 			this.mouseSensitivity = var2;
+		}
+
+		if(var1 == 10) {
+			this.gamma = Math.round(var2 * 100)/100F;
+		}
+
+		if(var1 == 11) {
+			this.opacity = Math.round(var2 * 100)/100F;
+		}
+
+		if(var1 == 12) {
+			this.offset = Math.round(var2 * 100)/100F;
 		}
 
 	}
@@ -105,19 +122,23 @@ public class GameSettings {
 			this.mc.field_6323_f.func_958_a();
 		}
 
+		if(var1 == 13) {
+			this.watermark = !this.watermark;
+		}
+
 		this.saveOptions();
 	}
 
 	public int getOptionControlType(int var1) {
-		return var1 == 0 ? 1 : (var1 == 1 ? 1 : (var1 == 3 ? 1 : 0));
+		return var1 == 12 ? 1 : (var1 == 11 ? 1 : (var1 == 10 ? 1 : (var1 == 0 ? 1 : (var1 == 1 ? 1 : (var1 == 3 ? 1 : 0)))));
 	}
 
 	public float getOptionFloatValue(int var1) {
-		return var1 == 0 ? this.musicVolume : (var1 == 1 ? this.soundVolume : (var1 == 3 ? this.mouseSensitivity : 0.0F));
+		return var1 == 12 ? this.offset : (var1 == 11 ? this.opacity : (var1 == 10 ? this.gamma : (var1 == 0 ? this.musicVolume : (var1 == 1 ? this.soundVolume : (var1 == 3 ? this.mouseSensitivity : 0.0F)))));
 	}
 
 	public String getOptionDisplayString(int var1) {
-		return var1 == 0 ? "Music: " + (this.musicVolume > 0.0F ? (int)(this.musicVolume * 100.0F) + "%" : "OFF") : (var1 == 1 ? "Sound: " + (this.soundVolume > 0.0F ? (int)(this.soundVolume * 100.0F) + "%" : "OFF") : (var1 == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (var1 == 3 ? (this.mouseSensitivity == 0.0F ? "Sensitivity: *yawn*" : (this.mouseSensitivity == 1.0F ? "Sensitivity: HYPERSPEED!!!" : "Sensitivity: " + (int)(this.mouseSensitivity * 200.0F) + "%")) : (var1 == 4 ? "Render distance: " + RENDER_DISTANCES[this.renderDistance] : (var1 == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (var1 == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (var1 == 7 ? "Limit framerate: " + (this.limitFramerate ? "ON" : "OFF") : (var1 == 8 ? "Difficulty: " + DIFFICULTY_LEVELS[this.difficulty] : (var1 == 9 ? "Graphics: " + (this.fancyGraphics ? "FANCY" : "FAST") : "")))))))));
+		return var1 == 13 ? "Alpha watermark: " + (this.watermark ? "ON" : "OFF") : (var1 == 12 ? "Interface offset: " + ((int)(this.offset * 100.0F)) : (var1 == 11 ? "Interface opacity: " + ((int)(this.opacity * 100.0F) + "%") : (var1 == 10 ? "Gamma: " + ((int)(this.gamma * 100.0F) + "%") : (var1 == 0 ? "Music: " + (this.musicVolume > 0.0F ? (int)(this.musicVolume * 100.0F) + "%" : "OFF") : (var1 == 1 ? "Sound: " + (this.soundVolume > 0.0F ? (int)(this.soundVolume * 100.0F) + "%" : "OFF") : (var1 == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (var1 == 3 ? (this.mouseSensitivity == 0.0F ? "Sensitivity: *yawn*" : (this.mouseSensitivity == 1.0F ? "Sensitivity: HYPERSPEED!!!" : "Sensitivity: " + (int)(this.mouseSensitivity * 200.0F) + "%")) : (var1 == 4 ? "Render distance: " + RENDER_DISTANCES[this.renderDistance] : (var1 == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (var1 == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (var1 == 7 ? "Limit framerate: " + (this.limitFramerate ? "ON" : "OFF") : (var1 == 8 ? "Difficulty: " + DIFFICULTY_LEVELS[this.difficulty] : (var1 == 9 ? "Graphics: " + (this.fancyGraphics ? "FANCY" : "FAST") : "")))))))))))));
 	}
 
 	public void loadOptions() {
@@ -185,6 +206,22 @@ public class GameSettings {
 					this.field_12259_z = var3[1];
 				}
 
+				if(var3[0].equals("gamma")) {
+					this.gamma = Math.round(this.parseFloat(var3[1]) * 100)/100F;
+				}
+
+				if(var3[0].equals("opacity")) {
+					this.opacity = Math.round(this.parseFloat(var3[1]) * 100)/100F;
+				}
+
+				if(var3[0].equals("offset")) {
+					this.offset = Math.round(this.parseFloat(var3[1]) * 100)/100F;
+				}
+
+				if(var3[0].equals("watermark")) {
+					this.watermark = var3[1].equals("true");
+				}
+
 				for(int var4 = 0; var4 < this.keyBindings.length; ++var4) {
 					if(var3[0].equals("key_" + this.keyBindings[var4].keyDescription)) {
 						this.keyBindings[var4].keyCode = Integer.parseInt(var3[1]);
@@ -217,6 +254,10 @@ public class GameSettings {
 			var1.println("fancyGraphics:" + this.fancyGraphics);
 			var1.println("skin:" + this.skin);
 			var1.println("lastServer:" + this.field_12259_z);
+			var1.println("gamma:" + this.gamma);
+			var1.println("opacity:" + this.opacity);
+			var1.println("offset:" + this.offset);
+			var1.println("watermark:" + this.watermark);
 
 			for(int var2 = 0; var2 < this.keyBindings.length; ++var2) {
 				var1.println("key_" + this.keyBindings[var2].keyDescription + ":" + this.keyBindings[var2].keyCode);

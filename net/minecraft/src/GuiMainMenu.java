@@ -55,6 +55,7 @@ public class GuiMainMenu extends GuiScreen {
 	}
 
 	public void initGui() {
+		this.mc.sndManager.playMusic();
 		Calendar var1 = Calendar.getInstance();
 		var1.setTime(new Date());
 		if(var1.get(2) + 1 == 11 && var1.get(5) == 9) {
@@ -112,6 +113,7 @@ public class GuiMainMenu extends GuiScreen {
 		this.drawCenteredString(this.fontRenderer, this.splashText, 0, -8, 16776960);
 		GL11.glPopMatrix();
 		this.drawString(this.fontRenderer, "Minecraft Alpha v1.2.6", 2, 2, 5263440);
+		this.drawString(this.fontRenderer, "\"Alpha4J\" Made By Recko", 2, this.height - 10, 16777215);
 		String var6 = "Copyright Mojang Specifications. Do not distribute.";
 		this.drawString(this.fontRenderer, var6, this.width - this.fontRenderer.getStringWidth(var6) - 2, this.height - 10, 16777215);
 		super.drawScreen(var1, var2, var3);
