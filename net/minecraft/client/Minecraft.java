@@ -926,7 +926,7 @@ public abstract class Minecraft implements Runnable {
 						int var3 = Mouse.getEventDWheel();
 						if(var3 != 0) {
 							this.thePlayer.inventory.changeCurrentItem(var3);
-							this.ingameGUI.opacity = 4.0F;
+							this.ingameGUI.opacity = 6.0F;
 						}
 
 						if(this.currentScreen == null) {
