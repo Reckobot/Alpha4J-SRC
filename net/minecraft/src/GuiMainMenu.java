@@ -100,7 +100,17 @@ public class GuiMainMenu extends GuiScreen {
 	public void drawScreen(int var1, int var2, float var3) {
 		this.drawDefaultBackground();
 		Tessellator var4 = Tessellator.instance;
-		this.drawLogo(var3);
+
+
+		short var50 = 274;
+		int var60 = this.width / 2 - var50 / 2;
+		byte var70 = 30;
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.drawTexturedModalRect(var60 + 0, var70 + 0, 0, 0, 155, 44);
+		this.drawTexturedModalRect(var60 + 155, var70 + 0, 0, 45, 155, 44);
+
+
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/logo.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		var4.setColorOpaque_I(16777215);
@@ -112,9 +122,8 @@ public class GuiMainMenu extends GuiScreen {
 		GL11.glScalef(var5, var5, var5);
 		this.drawCenteredString(this.fontRenderer, this.splashText, 0, -8, 16776960);
 		GL11.glPopMatrix();
-		this.drawString(this.fontRenderer, "Minecraft Alpha v1.2.6", 2, 2, 5263440);
-		this.drawString(this.fontRenderer, "\"Alpha4J\" Made By Recko", 2, this.height - 10, 16777215);
-		String var6 = "Copyright Mojang Specifications. Do not distribute.";
+		this.drawString(this.fontRenderer, "Minecraft Alpha4J By Reckodev", 2, this.height - 10, 16777215);
+		String var6 = "Copyright Mojang Specifications.";
 		this.drawString(this.fontRenderer, var6, this.width - this.fontRenderer.getStringWidth(var6) - 2, this.height - 10, 16777215);
 		super.drawScreen(var1, var2, var3);
 	}

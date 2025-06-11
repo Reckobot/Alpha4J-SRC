@@ -121,7 +121,7 @@ public abstract class Minecraft implements Runnable {
 			Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
 		}
 
-		Display.setTitle("Minecraft Minecraft Alpha v1.2.6");
+		Display.setTitle("Minecraft Minecraft Alpha4J");
 
 		try {
 			Display.create();
@@ -809,7 +809,17 @@ public abstract class Minecraft implements Runnable {
 
 	}
 
+	public double panoramaTimer = 0.0D;
+
 	public void runTick() {
+		if(this.currentScreen != null) {
+			if (this.panoramaTimer < (double) ((this.currentScreen.height) * 4)) {
+				this.panoramaTimer += 1D;
+			} else {
+				this.panoramaTimer = 0.0D;
+			}
+		}
+
 		this.ingameGUI.func_555_a();
 		this.field_9243_r.func_910_a(1.0F);
 		if(this.thePlayer != null) {

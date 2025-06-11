@@ -146,15 +146,14 @@ public class GuiScreen extends Gui {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_FOG);
 		Tessellator var2 = Tessellator.instance;
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/background.png"));
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/background.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		float var3 = 32.0F;
+		float var3 = this.height;
 		var2.startDrawingQuads();
-		var2.setColorOpaque_I(4210752);
-		var2.addVertexWithUV(0.0D, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / var3 + (float)var1));
-		var2.addVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)((float)this.width / var3), (double)((float)this.height / var3 + (float)var1));
-		var2.addVertexWithUV((double)this.width, 0.0D, 0.0D, (double)((float)this.width / var3), (double)(0 + var1));
-		var2.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, (double)(0 + var1));
+		var2.addVertexWithUV(0.0D - this.mc.panoramaTimer, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / var3 + (float)var1));
+		var2.addVertexWithUV((double)this.width * 4 - this.mc.panoramaTimer, (double)this.height, 0.0D, (double)((float)this.width / var3), (double)((float)this.height / var3 + (float)var1));
+		var2.addVertexWithUV((double)this.width * 4 - this.mc.panoramaTimer, 0.0D, 0.0D, (double)((float)this.width / var3), (double)(0 + var1));
+		var2.addVertexWithUV(0.0D - this.mc.panoramaTimer, 0.0D, 0.0D, 0.0D, (double)(0 + var1));
 		var2.draw();
 	}
 
