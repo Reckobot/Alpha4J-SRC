@@ -8,6 +8,11 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import net.minecraft.src.*;
 import org.lwjgl.LWJGLException;
@@ -809,9 +814,43 @@ public abstract class Minecraft implements Runnable {
 
 	}
 
+	public void unzip(String zipFilePath, String destDir) throws IOException {
+		File destDirFile = new File(destDir);
+		if (!destDirFile.exists()) {
+			destDirFile.mkdirs();
+		}
+
+		try (InputStream fis = this.getClass().getResourceAsStream(zipFilePath);
+			 ZipInputStream zis = new ZipInputStream(fis)) {
+
+			ZipEntry entry;
+			while ((entry = zis.getNextEntry()) != null) {
+				File entryFile = new File(destDir, entry.getName());
+				if (entry.isDirectory()) {
+					entryFile.mkdirs();
+				} else {
+					File parentFile = entryFile.getParentFile();
+					if (parentFile != null && !parentFile.exists()) {
+						parentFile.mkdirs();
+					}
+					try (FileOutputStream fos = new FileOutputStream(entryFile)) {
+						byte[] buffer = new byte[1024];
+						int len;
+						while ((len = zis.read(buffer)) > 0) {
+							fos.write(buffer, 0, len);
+						}
+					}
+				}
+				zis.closeEntry();
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public double panoramaTimer = 0.0D;
 
-	public void runTick() {
+	public void runTick() throws IOException {
 		if(this.currentScreen != null) {
 			if (this.panoramaTimer < (double) ((this.currentScreen.height) * 4)) {
 				this.panoramaTimer += 1D;

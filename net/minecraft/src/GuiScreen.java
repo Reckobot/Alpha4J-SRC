@@ -3,6 +3,7 @@ package net.minecraft.src;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -48,7 +49,7 @@ public class GuiScreen extends Gui {
 		return null;
 	}
 
-	protected void mouseClicked(int var1, int var2, int var3) {
+	protected void mouseClicked(int var1, int var2, int var3) throws IOException {
 		if(var3 == 0) {
 			for(int var4 = 0; var4 < this.controlList.size(); ++var4) {
 				GuiButton var5 = (GuiButton)this.controlList.get(var4);
@@ -70,7 +71,7 @@ public class GuiScreen extends Gui {
 
 	}
 
-	protected void actionPerformed(GuiButton var1) {
+	protected void actionPerformed(GuiButton var1) throws IOException {
 	}
 
 	public void setWorldAndResolution(Minecraft var1, int var2, int var3) {
@@ -85,7 +86,7 @@ public class GuiScreen extends Gui {
 	public void initGui() {
 	}
 
-	public void handleInput() {
+	public void handleInput() throws IOException {
 		while(Mouse.next()) {
 			this.handleMouseInput();
 		}
@@ -96,7 +97,7 @@ public class GuiScreen extends Gui {
 
 	}
 
-	public void handleMouseInput() {
+	public void handleMouseInput() throws IOException {
 		int var1;
 		int var2;
 		if(Mouse.getEventButtonState()) {
@@ -145,16 +146,17 @@ public class GuiScreen extends Gui {
 	public void drawBackground(int var1) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_FOG);
-		Tessellator var2 = Tessellator.instance;
+		Tessellator tess = Tessellator.instance;
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/background.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		float var3 = this.height;
-		var2.startDrawingQuads();
-		var2.addVertexWithUV(0.0D - this.mc.panoramaTimer, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / var3 + (float)var1));
-		var2.addVertexWithUV((double)this.width * 4 - this.mc.panoramaTimer, (double)this.height, 0.0D, (double)((float)this.width / var3), (double)((float)this.height / var3 + (float)var1));
-		var2.addVertexWithUV((double)this.width * 4 - this.mc.panoramaTimer, 0.0D, 0.0D, (double)((float)this.width / var3), (double)(0 + var1));
-		var2.addVertexWithUV(0.0D - this.mc.panoramaTimer, 0.0D, 0.0D, 0.0D, (double)(0 + var1));
-		var2.draw();
+		float val = this.height;
+		float widthMult = 4;
+		tess.startDrawingQuads();
+		tess.addVertexWithUV(0.0D - this.mc.panoramaTimer, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / val + (float)var1));
+		tess.addVertexWithUV((double)this.width * widthMult - this.mc.panoramaTimer, (double)this.height, 0.0D, (double)((float)this.width / val), (double)((float)this.height / val + (float)var1));
+		tess.addVertexWithUV((double)this.width * widthMult - this.mc.panoramaTimer, 0.0D, 0.0D, (double)((float)this.width / val), (double)(0 + var1));
+		tess.addVertexWithUV(0.0D - this.mc.panoramaTimer, 0.0D, 0.0D, 0.0D, (double)(0 + var1));
+		tess.draw();
 	}
 
 	public boolean doesGuiPauseGame() {

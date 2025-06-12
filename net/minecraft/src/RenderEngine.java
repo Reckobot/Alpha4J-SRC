@@ -20,7 +20,7 @@ public class RenderEngine {
 	private HashMap textureMap = new HashMap();
 	private HashMap textureNameToImageMap = new HashMap();
 	private IntBuffer singleIntBuffer = GLAllocation.createDirectIntBuffer(1);
-	private ByteBuffer imageData = GLAllocation.createDirectByteBuffer(1048576);
+	private ByteBuffer imageData = GLAllocation.createDirectByteBuffer(1048576*4);
 	private List field_1604_f = new ArrayList();
 	private Map urlToImageDataMap = new HashMap();
 	private GameSettings options;

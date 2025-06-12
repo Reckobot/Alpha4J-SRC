@@ -110,8 +110,17 @@ public class LoadingScreenRenderer implements IProgressUpdate {
 					GL11.glEnable(GL11.GL_TEXTURE_2D);
 				}
 
+				this.mc.currentScreen.drawBackground(0);
+
 				this.mc.fontRenderer.drawStringWithShadow(this.field_1007_c, (var5 - this.mc.fontRenderer.getStringWidth(this.field_1007_c)) / 2, var6 / 2 - 4 - 16, 16777215);
 				this.mc.fontRenderer.drawStringWithShadow(this.field_1004_a, (var5 - this.mc.fontRenderer.getStringWidth(this.field_1004_a)) / 2, var6 / 2 - 4 + 8, 16777215);
+
+				if (this.mc.panoramaTimer < (double) ((this.mc.currentScreen.height) * 4)) {
+					this.mc.panoramaTimer += 0.375D;
+				} else {
+					this.mc.panoramaTimer = 0.0D;
+				}
+
 				Display.update();
 
 				try {

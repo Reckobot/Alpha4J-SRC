@@ -407,7 +407,12 @@ public class World implements IBlockAccess {
 	}
 
 	public int getBlockId(int var1, int var2, int var3) {
-		return var1 >= -32000000 && var3 >= -32000000 && var1 < 32000000 && var3 <= 32000000 ? (var2 < 0 ? 0 : (var2 >= 128 ? 0 : this.getChunkFromChunkCoords(var1 >> 4, var3 >> 4).getBlockID(var1 & 15, var2, var3 & 15))) : 0;
+		int out = var1 >= -32000000 && var3 >= -32000000 && var1 < 32000000 && var3 <= 32000000 ? (var2 < 0 ? 0 : (var2 >= 128 ? 0 : this.getChunkFromChunkCoords(var1 >> 4, var3 >> 4).getBlockID(var1 & 15, var2, var3 & 15))) : 0;
+		if(Block.blocksList[out] == null) {
+			return 0;
+		} else {
+			return out;
+		}
 	}
 
 	public boolean blockExists(int var1, int var2, int var3) {

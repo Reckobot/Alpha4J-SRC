@@ -1,6 +1,12 @@
 package net.minecraft.src;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 import net.minecraft.client.Minecraft;
 
 public class GuiSelectWorld extends GuiScreen {
@@ -15,15 +21,27 @@ public class GuiSelectWorld extends GuiScreen {
 	public void initGui() {
 		File var1 = Minecraft.getMinecraftDir();
 
-		for(int var2 = 0; var2 < 5; ++var2) {
+		for(int var2 = -1; var2 < 5; ++var2) {
 			NBTTagCompound var3 = World.func_629_a(var1, "World" + (var2 + 1));
+
+			String emptyString = "- empty -";
+			String occupiedString = "World " + (var2 + 1);
+			int buttonOffset = 32;
+
+			if(var2 == -1) {
+				occupiedString = "Continue tutorial";
+				emptyString = "Play tutorial";
+				buttonOffset = 18;
+			}
+
 			if(var3 == null) {
-				this.controlList.add(new GuiButton(var2, this.width / 2 - 100, this.height / 6 + 24 * var2, "- empty -"));
+				this.controlList.add(new GuiButton(var2, this.width / 2 - 100, this.height / 6 + 22 * var2 + buttonOffset, emptyString));
 			} else {
-				String var4 = "World " + (var2 + 1);
 				long var5 = var3.getLong("SizeOnDisk");
-				var4 = var4 + " (" + (float)(var5 / 1024L * 100L / 1024L) / 100.0F + " MB)";
-				this.controlList.add(new GuiButton(var2, this.width / 2 - 100, this.height / 6 + 24 * var2, var4));
+				if(var2 != -1) {
+					occupiedString = occupiedString + " (" + (float) (var5 / 1024L * 100L / 1024L) / 100.0F + " MB)";
+				}
+				this.controlList.add(new GuiButton(var2, this.width / 2 - 100, this.height / 6 + 22 * var2 + buttonOffset, occupiedString));
 			}
 		}
 
@@ -36,11 +54,11 @@ public class GuiSelectWorld extends GuiScreen {
 	}
 
 	public void initGui2() {
-		this.controlList.add(new GuiButton(5, this.width / 2 - 100, this.height / 6 + 120 + 12, "Delete world..."));
-		this.controlList.add(new GuiButton(6, this.width / 2 - 100, this.height / 6 + 168, "Cancel"));
+		this.controlList.add(new GuiButton(5, this.width / 2 - 100, this.height - 58, "Delete world..."));
+		this.controlList.add(new GuiButton(6, this.width / 2 - 100, this.height - 34, "Cancel"));
 	}
 
-	protected void actionPerformed(GuiButton var1) {
+	protected void actionPerformed(GuiButton var1) throws IOException {
 		if(var1.enabled) {
 			if(var1.id < 5) {
 				this.selectWorld(var1.id + 1);
@@ -53,9 +71,15 @@ public class GuiSelectWorld extends GuiScreen {
 		}
 	}
 
-	public void selectWorld(int var1) {
+	public void selectWorld(int var1) throws IOException {
 		this.mc.displayGuiScreen((GuiScreen)null);
 		if(!this.selected) {
+			if(var1 == 0) {
+				if(World.func_629_a(Minecraft.getMinecraftDir(), "World0") == null) {
+					this.mc.unzip("/tutorial.zip", Minecraft.getMinecraftDir().getAbsolutePath() + "/saves/World0");
+				}
+			}
+
 			this.selected = true;
 			this.mc.field_6327_b = new PlayerControllerSP(this.mc);
 			this.mc.func_6247_b("World" + var1);

@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -46,7 +47,7 @@ public class GuiTexturePacks extends GuiScreen {
 		}
 	}
 
-	protected void mouseClicked(int var1, int var2, int var3) {
+	protected void mouseClicked(int var1, int var2, int var3) throws IOException {
 		super.mouseClicked(var1, var2, var3);
 	}
 
@@ -114,6 +115,8 @@ public class GuiTexturePacks extends GuiScreen {
 		var16.addVertexWithUV((double)this.field_6456_m, (double)this.field_6459_i, 0.0D, (double)((float)this.field_6456_m / var17), (double)((float)(this.field_6459_i + this.field_6460_h) / var17));
 		var16.addVertexWithUV((double)this.field_6457_l, (double)this.field_6459_i, 0.0D, (double)((float)this.field_6457_l / var17), (double)((float)(this.field_6459_i + this.field_6460_h) / var17));
 		var16.draw();
+
+		this.mc.currentScreen.drawBackground(0);
 
 		for(int var8 = 0; var8 < var4.size(); ++var8) {
 			TexturePackBase var9 = (TexturePackBase)var4.get(var8);
