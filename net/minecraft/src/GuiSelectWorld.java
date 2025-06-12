@@ -26,11 +26,11 @@ public class GuiSelectWorld extends GuiScreen {
 
 			String emptyString = "- empty -";
 			String occupiedString = "World " + (var2 + 1);
-			int buttonOffset = 32;
+			int buttonOffset = 24;
 
 			if(var2 == -1) {
-				occupiedString = "Continue tutorial";
-				emptyString = "Play tutorial";
+				occupiedString = "Tutorial level";
+				emptyString = "- empty tutorial -";
 				buttonOffset = 18;
 			}
 
@@ -38,9 +38,7 @@ public class GuiSelectWorld extends GuiScreen {
 				this.controlList.add(new GuiButton(var2, this.width / 2 - 100, this.height / 6 + 22 * var2 + buttonOffset, emptyString));
 			} else {
 				long var5 = var3.getLong("SizeOnDisk");
-				if(var2 != -1) {
-					occupiedString = occupiedString + " (" + (float) (var5 / 1024L * 100L / 1024L) / 100.0F + " MB)";
-				}
+				occupiedString = occupiedString + " (" + (float) (var5 / 1024L * 100L / 1024L) / 100.0F + " MB)";
 				this.controlList.add(new GuiButton(var2, this.width / 2 - 100, this.height / 6 + 22 * var2 + buttonOffset, occupiedString));
 			}
 		}

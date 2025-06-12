@@ -1,11 +1,14 @@
 package net.minecraft.src;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+
+import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -70,16 +73,16 @@ public class GuiMainMenu extends GuiScreen {
 
 		this.controlList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 48, "Singleplayer"));
 		this.controlList.add(new GuiButton(2, this.width / 2 - 100, this.height / 4 + 72, "Multiplayer"));
-		this.controlList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 96, "Play tutorial level"));
-		this.controlList.add(new GuiButton(3, this.width / 2 - 100, this.height / 4 + 120 + 12, "Mods and Texture Packs"));
-		this.controlList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 144 + 12, "Options..."));
+		this.controlList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 96, "Play tutorial level"));
+		this.controlList.add(new GuiButton(3, this.width / 2 - 100, this.height / 4 + 120, "Mods and Texture Packs"));
+		this.controlList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 144, "Options..."));
 		if(this.mc.field_6320_i == null) {
 			((GuiButton)this.controlList.get(1)).enabled = false;
 		}
 
 	}
 
-	protected void actionPerformed(GuiButton var1) {
+	protected void actionPerformed(GuiButton var1) throws IOException {
 		if(var1.id == 0) {
 			this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
 		}
@@ -94,6 +97,16 @@ public class GuiMainMenu extends GuiScreen {
 
 		if(var1.id == 3) {
 			this.mc.displayGuiScreen(new GuiTexturePacks(this));
+		}
+
+		if(var1.id == 4) {
+			if(World.func_629_a(Minecraft.getMinecraftDir(), "World0") == null) {
+				this.mc.unzip("/tutorial.zip", Minecraft.getMinecraftDir().getAbsolutePath() + "/saves/World0");
+			}
+
+			this.mc.field_6327_b = new PlayerControllerSP(this.mc);
+			this.mc.func_6247_b("World0");
+			this.mc.displayGuiScreen((GuiScreen)null);
 		}
 
 	}
