@@ -264,7 +264,7 @@ public class Chunk {
 			int var9 = this.xPosition * 16 + var1;
 			int var10 = this.zPosition * 16 + var3;
 			this.blocks[var1 << 11 | var3 << 7 | var2] = var6;
-			if(var8 != 0 && !this.worldObj.multiplayerWorld) {
+			if(var8 != 0 && !this.worldObj.multiplayerWorld && Block.blocksList[var8] != null) {
 				Block.blocksList[var8].onBlockRemoval(this.worldObj, var9, var2, var10);
 			}
 
@@ -283,7 +283,7 @@ public class Chunk {
 
 			this.worldObj.func_616_a(EnumSkyBlock.Block, var9, var2, var10, var9, var2, var10);
 			this.func_996_c(var1, var3);
-			if(var4 != 0) {
+			if(var4 != 0 && Block.blocksList[var4] != null) {
 				Block.blocksList[var4].onBlockAdded(this.worldObj, var9, var2, var10);
 			}
 
@@ -303,7 +303,7 @@ public class Chunk {
 			int var8 = this.xPosition * 16 + var1;
 			int var9 = this.zPosition * 16 + var3;
 			this.blocks[var1 << 11 | var3 << 7 | var2] = var5;
-			if(var7 != 0) {
+			if(var7 != 0 && Block.blocksList[var7] != null) {
 				Block.blocksList[var7].onBlockRemoval(this.worldObj, var8, var2, var9);
 			}
 
@@ -319,7 +319,7 @@ public class Chunk {
 			this.worldObj.func_616_a(EnumSkyBlock.Sky, var8, var2, var9, var8, var2, var9);
 			this.worldObj.func_616_a(EnumSkyBlock.Block, var8, var2, var9, var8, var2, var9);
 			this.func_996_c(var1, var3);
-			if(var4 != 0 && !this.worldObj.multiplayerWorld) {
+			if(var4 != 0 && !this.worldObj.multiplayerWorld && Block.blocksList[var4] != null) {
 				Block.blocksList[var4].onBlockAdded(this.worldObj, var8, var2, var9);
 			}
 
@@ -422,7 +422,7 @@ public class Chunk {
 		TileEntity var5 = (TileEntity)this.chunkTileEntityMap.get(var4);
 		if(var5 == null) {
 			int var6 = this.getBlockID(var1, var2, var3);
-			if(!Block.isBlockContainer[var6]) {
+			if(!Block.isBlockContainer[var6] || Block.blocksList[6] == null) {
 				return null;
 			}
 
