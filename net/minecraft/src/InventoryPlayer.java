@@ -1,5 +1,7 @@
 package net.minecraft.src;
 
+import net.minecraft.client.Minecraft;
+
 public class InventoryPlayer implements IInventory {
 	public ItemStack[] mainInventory = new ItemStack[37];
 	public ItemStack[] armorInventory = new ItemStack[4];
@@ -47,9 +49,10 @@ public class InventoryPlayer implements IInventory {
 		return -1;
 	}
 
-	public void setCurrentItem(int var1, boolean var2) {
+	public void setCurrentItem(int var1, boolean var2, Minecraft mc) {
 		int var3 = this.getInventorySlotContainItem(var1);
 		if(var3 >= 0 && var3 < 9) {
+			mc.ingameGUI.opacity = 6.0F;
 			this.currentItem = var3;
 		}
 	}

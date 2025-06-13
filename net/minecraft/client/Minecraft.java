@@ -81,6 +81,7 @@ public abstract class Minecraft implements Runnable {
 	public boolean field_6288_M = false;
 	long field_6287_N = System.currentTimeMillis();
 	private int field_6300_ab = 0;
+	public int uiToggle = 0;
 
 	public Minecraft(Component var1, Canvas var2, MinecraftApplet var3, int var4, int var5, boolean var6) {
 		this.field_9236_T = var4;
@@ -809,7 +810,7 @@ public abstract class Minecraft implements Runnable {
 				var1 = Block.stone.blockID;
 			}
 
-			this.thePlayer.inventory.setCurrentItem(var1, this.field_6327_b instanceof PlayerControllerTest);
+			this.thePlayer.inventory.setCurrentItem(var1, this.field_6327_b instanceof PlayerControllerTest, this);
 		}
 
 	}
@@ -958,11 +959,20 @@ public abstract class Minecraft implements Runnable {
 											for(int var4 = 0; var4 < 9; ++var4) {
 												if(Keyboard.getEventKey() == Keyboard.KEY_1 + var4) {
 													this.thePlayer.inventory.currentItem = var4;
+													this.ingameGUI.opacity = 6.0F;
 												}
 											}
 
 											if(Keyboard.getEventKey() == this.gameSettings.keyBindToggleFog.keyCode) {
 												this.gameSettings.setOptionValue(4, !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && !Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) ? 1 : -1);
+											}
+										}
+
+										if(Keyboard.isKeyDown(Keyboard.KEY_F1)) {
+											if(this.uiToggle < 3) {
+												this.uiToggle++;
+											} else {
+												this.uiToggle = 0;
 											}
 										}
 									}

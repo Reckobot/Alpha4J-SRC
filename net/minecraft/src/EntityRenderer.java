@@ -247,8 +247,10 @@ public class EntityRenderer {
 			this.func_917_f(var1);
 		}
 
-		if(!this.mc.gameSettings.thirdPersonView && !Keyboard.isKeyDown(Keyboard.KEY_F1)) {
-			this.field_1395_a.renderItemInFirstPerson(var1);
+		if(!this.mc.gameSettings.thirdPersonView) {
+			if(this.mc.uiToggle <= 1) {
+				this.field_1395_a.renderItemInFirstPerson(var1);
+			}
 		}
 
 		GL11.glPopMatrix();
@@ -294,9 +296,14 @@ public class EntityRenderer {
 			int var11 = var9 - Mouse.getY() * var9 / this.mc.displayHeight - 1;
 			if(this.mc.theWorld != null) {
 				this.func_4134_c(var1);
-				if(!Keyboard.isKeyDown(Keyboard.KEY_F1)) {
-					this.mc.ingameGUI.renderGameOverlay(var1, this.mc.currentScreen != null, var10, var11);
-				}
+				boolean valid = false;
+				switch(this.mc.uiToggle) {
+					case 0:
+                    case 3:
+                        valid = true;
+						break;
+                }
+				this.mc.ingameGUI.renderGameOverlay(var1, this.mc.currentScreen != null, var10, var11, valid);
 			} else {
 				GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
 				GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
