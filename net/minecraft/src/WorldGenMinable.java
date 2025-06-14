@@ -27,15 +27,25 @@ public class WorldGenMinable extends WorldGenerator {
 			double var26 = var2.nextDouble() * (double)this.numberOfBlocks / 16.0D;
 			double var28 = (double)(MathHelper.sin((float)var19 * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * var26 + 1.0D;
 			double var30 = (double)(MathHelper.sin((float)var19 * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * var26 + 1.0D;
+			int var32 = MathHelper.floor_double(var20 - var28 / 2.0D);
+			int var33 = MathHelper.floor_double(var22 - var30 / 2.0D);
+			int var34 = MathHelper.floor_double(var24 - var28 / 2.0D);
+			int var35 = MathHelper.floor_double(var20 + var28 / 2.0D);
+			int var36 = MathHelper.floor_double(var22 + var30 / 2.0D);
+			int var37 = MathHelper.floor_double(var24 + var28 / 2.0D);
 
-			for(int var32 = (int)(var20 - var28 / 2.0D); var32 <= (int)(var20 + var28 / 2.0D); ++var32) {
-				for(int var33 = (int)(var22 - var30 / 2.0D); var33 <= (int)(var22 + var30 / 2.0D); ++var33) {
-					for(int var34 = (int)(var24 - var28 / 2.0D); var34 <= (int)(var24 + var28 / 2.0D); ++var34) {
-						double var35 = ((double)var32 + 0.5D - var20) / (var28 / 2.0D);
-						double var37 = ((double)var33 + 0.5D - var22) / (var30 / 2.0D);
-						double var39 = ((double)var34 + 0.5D - var24) / (var28 / 2.0D);
-						if(var35 * var35 + var37 * var37 + var39 * var39 < 1.0D && var1.getBlockId(var32, var33, var34) == Block.stone.blockID) {
-							var1.setBlock(var32, var33, var34, this.minableBlockId);
+			for(int var38 = var32; var38 <= var35; ++var38) {
+				double var39 = ((double)var38 + 0.5D - var20) / (var28 / 2.0D);
+				if(var39 * var39 < 1.0D) {
+					for(int var41 = var33; var41 <= var36; ++var41) {
+						double var42 = ((double)var41 + 0.5D - var22) / (var30 / 2.0D);
+						if(var39 * var39 + var42 * var42 < 1.0D) {
+							for(int var44 = var34; var44 <= var37; ++var44) {
+								double var45 = ((double)var44 + 0.5D - var24) / (var28 / 2.0D);
+								if(var39 * var39 + var42 * var42 + var45 * var45 < 1.0D && var1.getBlockId(var38, var41, var44) == Block.stone.blockID) {
+									var1.setBlock(var38, var41, var44, this.minableBlockId);
+								}
+							}
 						}
 					}
 				}
