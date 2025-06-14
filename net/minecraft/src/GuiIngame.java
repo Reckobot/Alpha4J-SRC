@@ -60,7 +60,7 @@ public class GuiIngame extends Gui {
 		this.zLevel = -90.0F;
 		if(valid) {
 			this.drawTexturedModalRect(var6 / 2 - 91, var7 - 22 - (int) (this.mc.gameSettings.offset * 100), 0, 0, 182, 22);
-			this.drawTexturedModalRect(var6 / 2 - 91 - 1 + var11.currentItem * 20, var7 - 22 - 1 - (int) (this.mc.gameSettings.offset * 100), 0, 22, 24, 22);
+			this.drawTexturedModalRect(var6 / 2 - 91 - 1 + var11.currentItem * 20, var7 - 22 - 1 - (int) (this.mc.gameSettings.offset * 100), 0, 22, 24, 24);
 		}
 		if(valid) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/icons.png"));
