@@ -82,6 +82,7 @@ public abstract class Minecraft implements Runnable {
 	long field_6287_N = System.currentTimeMillis();
 	private int field_6300_ab = 0;
 	public int uiToggle = 0;
+	public boolean f3Enabled = false;
 
 	public Minecraft(Component var1, Canvas var2, MinecraftApplet var3, int var4, int var5, boolean var6) {
 		this.field_9236_T = var4;
@@ -475,7 +476,7 @@ public abstract class Minecraft implements Runnable {
 						Thread.sleep(10L);
 					}
 
-					if(Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+					if(this.f3Enabled) {
 						this.func_6238_a(var20);
 					} else {
 						this.field_6290_K = System.nanoTime();
@@ -971,6 +972,10 @@ public abstract class Minecraft implements Runnable {
 											} else {
 												this.uiToggle = 0;
 											}
+										}
+
+										if(Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+											this.f3Enabled = !this.f3Enabled;
 										}
 									}
 								}

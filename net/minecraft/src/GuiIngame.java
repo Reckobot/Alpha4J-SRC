@@ -160,7 +160,7 @@ public class GuiIngame extends Gui {
 			RenderHelper.disableStandardItemLighting();
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			String var23;
-			if (Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+			if (this.mc.f3Enabled) {
 				var8.drawStringWithShadow("Minecraft Alpha4J (" + this.mc.field_6292_I + ")", 2, 2, 16777215);
 				var8.drawStringWithShadow(this.mc.func_6241_m(), 2, 12, 16777215);
 				var8.drawStringWithShadow(this.mc.func_6262_n(), 2, 22, 16777215);
