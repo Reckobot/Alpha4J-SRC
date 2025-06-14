@@ -4,11 +4,12 @@ import java.util.Random;
 
 public class BlockLeaves extends BlockLeavesBase {
 	private int baseIndexInPNG;
-	private int field_464_c = 0;
+	int[] field_20017_a;
 
 	protected BlockLeaves(int var1, int var2) {
 		super(var1, var2, Material.leaves, false);
 		this.baseIndexInPNG = var2;
+		this.setTickOnLoad(true);
 	}
 
 	public int colorMultiplier(IBlockAccess var1, int var2, int var3, int var4) {
@@ -18,83 +19,112 @@ public class BlockLeaves extends BlockLeavesBase {
 		return ColorizerFoliage.func_4146_a(var5, var7);
 	}
 
-	public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5) {
-		if(this == null) {
-			this.field_464_c = 0;
-			this.func_308_h(var1, var2, var3, var4);
-			super.onNeighborBlockChange(var1, var2, var3, var4, var5);
-		}
-	}
-
-	public void func_6361_f(World var1, int var2, int var3, int var4, int var5) {
-		if(var1.getBlockId(var2, var3, var4) == this.blockID) {
-			int var6 = var1.getBlockMetadata(var2, var3, var4);
-			if(var6 != 0 && var6 == var5 - 1) {
-				this.func_308_h(var1, var2, var3, var4);
-			}
-		}
-	}
-
-	public void func_308_h(World var1, int var2, int var3, int var4) {
-		if(this == null) {
-			if(this.field_464_c++ < 100) {
-				int var5 = var1.getBlockMaterial(var2, var3 - 1, var4).func_878_a() ? 16 : 0;
-				int var6 = var1.getBlockMetadata(var2, var3, var4);
-				if(var6 == 0) {
-					var6 = 1;
-					var1.setBlockMetadataWithNotify(var2, var3, var4, 1);
-				}
-
-				var5 = this.func_6362_g(var1, var2, var3 - 1, var4, var5);
-				var5 = this.func_6362_g(var1, var2, var3, var4 - 1, var5);
-				var5 = this.func_6362_g(var1, var2, var3, var4 + 1, var5);
-				var5 = this.func_6362_g(var1, var2 - 1, var3, var4, var5);
-				var5 = this.func_6362_g(var1, var2 + 1, var3, var4, var5);
-				int var7 = var5 - 1;
-				if(var7 < 10) {
-					var7 = 1;
-				}
-
-				if(var7 != var6) {
-					var1.setBlockMetadataWithNotify(var2, var3, var4, var7);
-					this.func_6361_f(var1, var2, var3 - 1, var4, var6);
-					this.func_6361_f(var1, var2, var3 + 1, var4, var6);
-					this.func_6361_f(var1, var2, var3, var4 - 1, var6);
-					this.func_6361_f(var1, var2, var3, var4 + 1, var6);
-					this.func_6361_f(var1, var2 - 1, var3, var4, var6);
-					this.func_6361_f(var1, var2 + 1, var3, var4, var6);
-				}
-
-			}
-		}
-	}
-
-	private int func_6362_g(World var1, int var2, int var3, int var4, int var5) {
-		int var6 = var1.getBlockId(var2, var3, var4);
-		if(var6 == Block.wood.blockID) {
-			return 16;
-		} else {
-			if(var6 == this.blockID) {
-				int var7 = var1.getBlockMetadata(var2, var3, var4);
-				if(var7 != 0 && var7 > var5) {
-					return var7;
+	public void onBlockRemoval(World var1, int var2, int var3, int var4) {
+		byte var5 = 1;
+		int var6 = var5 + 1;
+		if(var1.checkChunksExist(var2 - var6, var3 - var6, var4 - var6, var2 + var6, var3 + var6, var4 + var6)) {
+			for(int var7 = -var5; var7 <= var5; ++var7) {
+				for(int var8 = -var5; var8 <= var5; ++var8) {
+					for(int var9 = -var5; var9 <= var5; ++var9) {
+						int var10 = var1.getBlockId(var2 + var7, var3 + var8, var4 + var9);
+						if(var10 == Block.leaves.blockID) {
+							var1.setBlockMetadata(var2 + var7, var3 + var8, var4 + var9, 7);
+						}
+					}
 				}
 			}
-
-			return var5;
 		}
+
 	}
 
 	public void updateTick(World var1, int var2, int var3, int var4, Random var5) {
-		if(this == null) {
-			int var6 = var1.getBlockMetadata(var2, var3, var4);
-			if(var6 == 0) {
-				this.field_464_c = 0;
-				this.func_308_h(var1, var2, var3, var4);
-			} else if(var6 == 1) {
-				this.func_6360_i(var1, var2, var3, var4);
-			} else if(var5.nextInt(10) == 0) {
-				this.func_308_h(var1, var2, var3, var4);
+		if(!var1.multiplayerWorld) {
+			if(var1.getBlockMetadata(var2, var3, var4) == 7) {
+				byte var6 = 4;
+				int var7 = var6 + 1;
+				byte var8 = 32;
+				int var9 = var8 * var8;
+				int var10 = var8 / 2;
+				if(this.field_20017_a == null) {
+					this.field_20017_a = new int[var8 * var8 * var8];
+				}
+
+				int var11;
+				if(var1.checkChunksExist(var2 - var7, var3 - var7, var4 - var7, var2 + var7, var3 + var7, var4 + var7)) {
+					var11 = -var6;
+
+					label111:
+					while(true) {
+						int var12;
+						int var13;
+						int var14;
+						if(var11 > var6) {
+							var11 = 1;
+
+							while(true) {
+								if(var11 > 4) {
+									break label111;
+								}
+
+								for(var12 = -var6; var12 <= var6; ++var12) {
+									for(var13 = -var6; var13 <= var6; ++var13) {
+										for(var14 = -var6; var14 <= var6; ++var14) {
+											if(this.field_20017_a[(var12 + var10) * var9 + (var13 + var10) * var8 + var14 + var10] == var11 - 1) {
+												if(this.field_20017_a[(var12 + var10 - 1) * var9 + (var13 + var10) * var8 + var14 + var10] == -2) {
+													this.field_20017_a[(var12 + var10 - 1) * var9 + (var13 + var10) * var8 + var14 + var10] = var11;
+												}
+
+												if(this.field_20017_a[(var12 + var10 + 1) * var9 + (var13 + var10) * var8 + var14 + var10] == -2) {
+													this.field_20017_a[(var12 + var10 + 1) * var9 + (var13 + var10) * var8 + var14 + var10] = var11;
+												}
+
+												if(this.field_20017_a[(var12 + var10) * var9 + (var13 + var10 - 1) * var8 + var14 + var10] == -2) {
+													this.field_20017_a[(var12 + var10) * var9 + (var13 + var10 - 1) * var8 + var14 + var10] = var11;
+												}
+
+												if(this.field_20017_a[(var12 + var10) * var9 + (var13 + var10 + 1) * var8 + var14 + var10] == -2) {
+													this.field_20017_a[(var12 + var10) * var9 + (var13 + var10 + 1) * var8 + var14 + var10] = var11;
+												}
+
+												if(this.field_20017_a[(var12 + var10) * var9 + (var13 + var10) * var8 + (var14 + var10 - 1)] == -2) {
+													this.field_20017_a[(var12 + var10) * var9 + (var13 + var10) * var8 + (var14 + var10 - 1)] = var11;
+												}
+
+												if(this.field_20017_a[(var12 + var10) * var9 + (var13 + var10) * var8 + var14 + var10 + 1] == -2) {
+													this.field_20017_a[(var12 + var10) * var9 + (var13 + var10) * var8 + var14 + var10 + 1] = var11;
+												}
+											}
+										}
+									}
+								}
+
+								++var11;
+							}
+						}
+
+						for(var12 = -var6; var12 <= var6; ++var12) {
+							for(var13 = -var6; var13 <= var6; ++var13) {
+								var14 = var1.getBlockId(var2 + var11, var3 + var12, var4 + var13);
+								if(var14 == Block.wood.blockID) {
+									this.field_20017_a[(var11 + var10) * var9 + (var12 + var10) * var8 + var13 + var10] = 0;
+								} else if(var14 == Block.leaves.blockID) {
+									this.field_20017_a[(var11 + var10) * var9 + (var12 + var10) * var8 + var13 + var10] = -2;
+								} else {
+									this.field_20017_a[(var11 + var10) * var9 + (var12 + var10) * var8 + var13 + var10] = -1;
+								}
+							}
+						}
+
+						++var11;
+					}
+				}
+
+				var11 = this.field_20017_a[var10 * var9 + var10 * var8 + var10];
+				if(var11 >= 0) {
+					var1.setBlockMetadataWithNotify(var2, var3, var4, 0);
+				} else {
+					this.func_6360_i(var1, var2, var3, var4);
+				}
 			}
 
 		}
@@ -106,7 +136,7 @@ public class BlockLeaves extends BlockLeavesBase {
 	}
 
 	public int quantityDropped(Random var1) {
-		return var1.nextInt(20) == 0 ? 1 : 0;
+		return var1.nextInt(16) == 0 ? 1 : 0;
 	}
 
 	public int idDropped(int var1, Random var2) {

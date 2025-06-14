@@ -524,10 +524,7 @@ public abstract class Minecraft implements Runnable {
 	private void func_6248_s() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_F2)) {
 			if(!this.field_6291_J) {
-				if(Keyboard.isKeyDown(Keyboard.KEY_F1)) {
-					this.ingameGUI.addChatMessage(ScreenShotHelper.func_4148_a(minecraftDir, this.displayWidth, this.displayHeight));
-				}
-
+				this.ingameGUI.addChatMessage(ScreenShotHelper.func_4148_a(minecraftDir, this.displayWidth, this.displayHeight));
 				this.field_6291_J = true;
 			}
 		} else {
