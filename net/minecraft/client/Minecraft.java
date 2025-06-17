@@ -370,9 +370,9 @@ public abstract class Minecraft implements Runnable {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthMask(false);
-		float gamma = this.gameSettings.gamma*0.6F/3F;
+		float gamma = this.gameSettings.gamma*0.6F/4F;
 
-		glBlendColor(1.0F, 1.0F, 1.0F, 0.1F);
+		glBlendColor(1.0F, 1.0F, 1.0F, 0.05F);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_COLOR, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 		GL11.glColor4f(gamma, gamma, gamma, this.gameSettings.gamma);
@@ -392,6 +392,8 @@ public abstract class Minecraft implements Runnable {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	}
 
+	float prevTick = 0.0F;
+
 	public void run() {
 		this.running = true;
 
@@ -409,6 +411,15 @@ public abstract class Minecraft implements Runnable {
 				int var3 = 0;
 
 				while(this.running && (this.mcApplet == null || this.mcApplet.isActive())) {
+					if(this.currentScreen != null) {
+						if (this.panoramaTimer < (double) ((this.currentScreen.height) * 4)) {
+							this.panoramaTimer += Math.abs(this.prevTick - this.timer.renderPartialTicks)/2.0F;
+						} else {
+							this.panoramaTimer = 0.0D;
+						}
+					}
+					this.prevTick = this.timer.renderPartialTicks;
+
 					AxisAlignedBB.clearBoundingBoxPool();
 					Vec3D.initialize();
 					if(this.mcCanvas == null && Display.isCloseRequested()) {
@@ -454,8 +465,6 @@ public abstract class Minecraft implements Runnable {
 						Thread.sleep(5L);
 					}
 
-					this.gammaOverlay();
-
 					if(!Keyboard.isKeyDown(Keyboard.KEY_F7)) {
 						Display.update();
 					}
@@ -483,6 +492,7 @@ public abstract class Minecraft implements Runnable {
 					}
 
 					Thread.yield();
+					this.gammaOverlay();
 					if(Keyboard.isKeyDown(Keyboard.KEY_F7)) {
 						Display.update();
 					}
@@ -847,17 +857,9 @@ public abstract class Minecraft implements Runnable {
 		}
 	}
 
-	public double panoramaTimer = 0.0D;
+	public double panoramaTimer = this.displayWidth/2.0;
 
 	public void runTick() throws IOException {
-		if(this.currentScreen != null) {
-			if (this.panoramaTimer < (double) ((this.currentScreen.height) * 4)) {
-				this.panoramaTimer += 1D;
-			} else {
-				this.panoramaTimer = 0.0D;
-			}
-		}
-
 		this.ingameGUI.func_555_a();
 		this.field_9243_r.func_910_a(1.0F);
 		if(this.thePlayer != null) {
