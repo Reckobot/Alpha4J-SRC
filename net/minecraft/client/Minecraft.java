@@ -370,9 +370,9 @@ public abstract class Minecraft implements Runnable {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthMask(false);
-		float gamma = this.gameSettings.gamma*0.6F/4F;
+		float gamma = this.gameSettings.gamma*0.6F/3F;
 
-		glBlendColor(1.0F, 1.0F, 1.0F, 0.05F);
+		glBlendColor(1.0F, 1.0F, 1.0F, 0.075F);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_COLOR, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 		GL11.glColor4f(gamma, gamma, gamma, this.gameSettings.gamma);

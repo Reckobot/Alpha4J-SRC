@@ -9,6 +9,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import static org.lwjgl.opengl.GL14.glBlendColor;
+
 public class GuiIngame extends Gui {
 	private static RenderItem itemRenderer = new RenderItem();
 	private List chatMessageList = new ArrayList();
@@ -64,8 +66,8 @@ public class GuiIngame extends Gui {
 		}
 		if(valid) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/icons.png"));
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR);
+			glBlendColor(1.0F, 1.0F, 1.0F, this.opacity);
+			GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_CONSTANT_ALPHA);
 			this.drawTexturedModalRect(var6 / 2 - 7, var7 / 2 - 7, 0, 0, 16, 16);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			boolean var12 = this.mc.thePlayer.field_9306_bj / 3 % 2 == 1;
@@ -210,7 +212,7 @@ public class GuiIngame extends Gui {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, (float) (var7 - 48), 0.0F);
+			GL11.glTranslatef(0.0F, (float) (var7 - 48 - (int) (this.mc.gameSettings.offset * 100)), 0.0F);
 
 			for (var17 = 0; var17 < this.chatMessageList.size() && var17 < var26; ++var17) {
 				if (((ChatLine) this.chatMessageList.get(var17)).updateCounter < 200 || var28) {
