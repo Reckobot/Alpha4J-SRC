@@ -366,15 +366,39 @@ public abstract class Minecraft implements Runnable {
 		System.gc();
 	}
 
-	public void gammaOverlay() {
+	public void gammaOverlay1() {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthMask(false);
-		float gamma = this.gameSettings.gamma*0.6F/3F;
 
-		glBlendColor(1.0F, 1.0F, 1.0F, 0.1F);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_COLOR, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.375F);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		Tessellator tess = Tessellator.instance;
+		tess.startDrawingQuads();
+		tess.addVertexWithUV(0.0D, (double)this.displayHeight, -90.0D, 0.0D, 1.0D);
+		tess.addVertexWithUV((double)this.displayWidth, (double)this.displayHeight, -90.0D, 1.0D, 1.0D);
+		tess.addVertexWithUV((double)this.displayWidth, 0.0D, -90.0D, 1.0D, 0.0D);
+		tess.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+		tess.draw();
+
+
+		GL11.glDepthMask(true);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	public void gammaOverlay2() {
+		RenderHelper.disableStandardItemLighting();
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(false);
+		float gamma = this.gameSettings.gamma*0.6F/4F;
+
+		glBlendColor(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_CONSTANT_ALPHA);
 		GL11.glColor4f(gamma, gamma, gamma, this.gameSettings.gamma);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		Tessellator tess = Tessellator.instance;
@@ -412,7 +436,7 @@ public abstract class Minecraft implements Runnable {
 
 				while(this.running && (this.mcApplet == null || this.mcApplet.isActive())) {
 					if(this.currentScreen != null) {
-						if (this.panoramaTimer < (double) ((this.currentScreen.height) * 4)) {
+						if (this.panoramaTimer < (double) ((this.currentScreen.height) * 820F/144F)) {
 							this.panoramaTimer += Math.abs(this.prevTick - this.timer.renderPartialTicks)/2.0F;
 						} else {
 							this.panoramaTimer = 0.0D;
@@ -492,7 +516,10 @@ public abstract class Minecraft implements Runnable {
 					}
 
 					Thread.yield();
-					this.gammaOverlay();
+					this.gammaOverlay1();
+					for(int i = 0; i < 3; i++) {
+						this.gammaOverlay2();
+					}
 					if(Keyboard.isKeyDown(Keyboard.KEY_F7)) {
 						Display.update();
 					}
@@ -857,7 +884,7 @@ public abstract class Minecraft implements Runnable {
 		}
 	}
 
-	public double panoramaTimer = this.displayWidth/2.0;
+	public double panoramaTimer = 0.0;
 
 	public void runTick() throws IOException {
 		this.ingameGUI.func_555_a();
