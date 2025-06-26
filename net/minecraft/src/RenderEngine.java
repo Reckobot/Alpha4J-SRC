@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.imageio.ImageIO;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL14.GL_TEXTURE_LOD_BIAS;
 
 public class RenderEngine {
 	public static boolean useMipmaps = false;
@@ -34,33 +34,53 @@ public class RenderEngine {
 	}
 
 	public int getTexture(String var1) {
-		TexturePackBase var2 = this.field_6527_k.selectedTexturePack;
-		Integer var3 = (Integer)this.textureMap.get(var1);
-		if(var3 != null) {
-			return var3.intValue();
-		} else {
-			try {
-				this.singleIntBuffer.clear();
-				GLAllocation.generateTextureNames(this.singleIntBuffer);
-				int var5 = this.singleIntBuffer.get(0);
-				if(var1.startsWith("##")) {
-					this.setupTexture(this.unwrapImageByColumns(this.readTextureImage(var2.func_6481_a(var1.substring(2)))), var5);
-				} else if(var1.startsWith("%clamp%")) {
-					this.clampTexture = true;
-					this.setupTexture(this.readTextureImage(var2.func_6481_a(var1.substring(7))), var5);
-					this.clampTexture = false;
-				} else if(var1.startsWith("%blur%")) {
-					this.blurTexture = true;
-					this.setupTexture(this.readTextureImage(var2.func_6481_a(var1.substring(6))), var5);
-					this.blurTexture = false;
-				} else {
-					this.setupTexture(this.readTextureImage(var2.func_6481_a(var1)), var5);
-				}
+		if(!Objects.equals(var1, "/terrain.png")) {
+			TexturePackBase var2 = this.field_6527_k.selectedTexturePack;
+			Integer var3 = (Integer) this.textureMap.get(var1);
+			if (var3 != null) {
+				return var3.intValue();
+			} else {
+				try {
+					this.singleIntBuffer.clear();
+					GLAllocation.generateTextureNames(this.singleIntBuffer);
+					int var5 = this.singleIntBuffer.get(0);
+					if (var1.startsWith("##")) {
+						this.setupTexture(this.unwrapImageByColumns(this.readTextureImage(var2.func_6481_a(var1.substring(2)))), var5);
+					} else if (var1.startsWith("%clamp%")) {
+						this.clampTexture = true;
+						this.setupTexture(this.readTextureImage(var2.func_6481_a(var1.substring(7))), var5);
+						this.clampTexture = false;
+					} else if (var1.startsWith("%blur%")) {
+						this.blurTexture = true;
+						this.setupTexture(this.readTextureImage(var2.func_6481_a(var1.substring(6))), var5);
+						this.blurTexture = false;
+					} else {
+						this.setupTexture(this.readTextureImage(var2.func_6481_a(var1)), var5);
+					}
 
-				this.textureMap.put(var1, Integer.valueOf(var5));
-				return var5;
-			} catch (IOException var4) {
-				throw new RuntimeException("!!");
+					this.textureMap.put(var1, Integer.valueOf(var5));
+					return var5;
+				} catch (IOException var4) {
+					throw new RuntimeException("!!");
+				}
+			}
+		} else {
+			TexturePackBase var2 = this.field_6527_k.selectedTexturePack;
+			Integer var3 = (Integer) this.textureMap.get(var1);
+			if (var3 != null) {
+				return var3.intValue();
+			} else {
+				try {
+					this.singleIntBuffer.clear();
+					GLAllocation.generateTextureNames(this.singleIntBuffer);
+					int var5 = this.singleIntBuffer.get(0);
+					this.setupTextureMipMap(this.readTextureImage(var2.func_6481_a(var1)), var5);
+
+					this.textureMap.put(var1, Integer.valueOf(var5));
+					return var5;
+				} catch (IOException var4) {
+					throw new RuntimeException("!!");
+				}
 			}
 		}
 	}
@@ -169,6 +189,74 @@ public class RenderEngine {
 			}
 		}
 
+	}
+
+	public void setupTextureMipMap(BufferedImage var1, int var2) {
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, var2);
+
+		if(this.blurTexture) {
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		}
+
+		if(this.clampTexture) {
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+		} else {
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+		}
+
+		int var3 = var1.getWidth();
+		int var4 = var1.getHeight();
+		int[] var5 = new int[var3 * var4];
+		byte[] var6 = new byte[var3 * var4 * 4];
+		var1.getRGB(0, 0, var3, var4, var5, 0, var3);
+
+		int var7;
+		int var8;
+		int var9;
+		int var10;
+		int var11;
+		int var12;
+		int var13;
+		int var14;
+		for(var7 = 0; var7 < var5.length; ++var7) {
+			var8 = var5[var7] >> 24 & 255;
+			var9 = var5[var7] >> 16 & 255;
+			var10 = var5[var7] >> 8 & 255;
+			var11 = var5[var7] & 255;
+			if(this.options != null && this.options.anaglyph) {
+				var12 = (var9 * 30 + var10 * 59 + var11 * 11) / 100;
+				var13 = (var9 * 30 + var10 * 70) / 100;
+				var14 = (var9 * 30 + var11 * 70) / 100;
+				var9 = var12;
+				var10 = var13;
+				var11 = var14;
+			}
+
+			var6[var7 * 4 + 0] = (byte)var9;
+			var6[var7 * 4 + 1] = (byte)var10;
+			var6[var7 * 4 + 2] = (byte)var11;
+			var6[var7 * 4 + 3] = (byte)var8;
+		}
+
+		this.imageData.clear();
+		this.imageData.put(var6);
+		this.imageData.position(0).limit(var6.length);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, var3, var4, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)this.imageData);
+
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_NEAREST);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+
+		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 1.0F);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 2);
+
+		GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, GL11.GL_RGBA, var1.getWidth(), var1.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
 	}
 
 	public void deleteTexture(int var1) {

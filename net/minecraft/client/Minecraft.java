@@ -373,7 +373,7 @@ public abstract class Minecraft implements Runnable {
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.375F);
+		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.4F);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		Tessellator tess = Tessellator.instance;
 		tess.startDrawingQuads();
