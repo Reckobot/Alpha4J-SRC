@@ -130,6 +130,10 @@ public class Item {
 		return false;
 	}
 
+	public boolean onItemUseTest(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7) {
+		return false;
+	}
+
 	public float getStrVsBlock(ItemStack var1, Block var2) {
 		return 1.0F;
 	}

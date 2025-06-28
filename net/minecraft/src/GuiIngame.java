@@ -23,10 +23,47 @@ public class GuiIngame extends Gui {
 	public float field_6446_b;
 	float field_931_c = 1.0F;
 
+	int tooltipX = 0;
+
 	public float opacity = 0.0F;
 
 	public GuiIngame(Minecraft var1) {
 		this.mc = var1;
+	}
+
+	public void renderToolTip(String key, String text) {
+		float scale = 0.75F;
+		GL11.glScalef(scale, scale, scale);
+		ScaledResolution var5 = new ScaledResolution(this.mc.displayWidth, this.mc.displayHeight);
+		int var6 = var5.getScaledWidth();
+		int var7 = var5.getScaledHeight();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, this.opacity);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/key.png"));
+		this.drawTexturedModalRect((int)(24*(1F/scale))+tooltipX, (int)((var7 - 32)*(1F/scale)), 0, 0, 16, 16);
+
+		this.drawString(this.mc.fontRenderer, key, ((int)(24*(1F/scale)) + tooltipX) + 5, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
+		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 20, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
+
+		tooltipX += (text.length()*8) + 6;
+
+		GL11.glScalef(1F/scale, 1F/scale, 1F/scale);
+	}
+
+	public void renderMouseToolTip(String tex, String text) {
+		float scale = 0.75F;
+		GL11.glScalef(scale, scale, scale);
+		ScaledResolution var5 = new ScaledResolution(this.mc.displayWidth, this.mc.displayHeight);
+		int var6 = var5.getScaledWidth();
+		int var7 = var5.getScaledHeight();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, this.opacity);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture(tex));
+		this.drawTexturedModalRect((int)(24*(1F/scale))+tooltipX, (int)((var7 - 32)*(1F/scale)), 0, 0, 16, 16);
+
+		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 18, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
+
+		tooltipX += (text.length()*8) + 20;
+
+		GL11.glScalef(1F/scale, 1F/scale, 1F/scale);
 	}
 
 	public void renderGameOverlay(float var1, boolean var2, int var3, int var4, boolean valid) {
@@ -63,6 +100,25 @@ public class GuiIngame extends Gui {
 		if(valid) {
 			this.drawTexturedModalRect(var6 / 2 - 91, var7 - 22 - (int) (this.mc.gameSettings.offset * 100), 0, 0, 182, 22);
 			this.drawTexturedModalRect(var6 / 2 - 91 - 1 + var11.currentItem * 20, var7 - 22 - 1 - (int) (this.mc.gameSettings.offset * 100), 0, 22, 24, 24);
+		}
+		this.tooltipX = 0;
+		if(valid) {
+			renderToolTip("E", "Inventory");
+
+			if(this.mc.objectMouseOver != null) {
+				int blockX = this.mc.objectMouseOver.blockX;
+				int blockY = this.mc.objectMouseOver.blockY;
+				int blockZ = this.mc.objectMouseOver.blockZ;
+				int sideHit = this.mc.objectMouseOver.sideHit;
+				ItemStack itm = this.mc.thePlayer.inventory.getCurrentItem();
+				if(itm != null) {
+					if (itm.getItem().onItemUseTest(itm, this.mc.thePlayer, this.mc.theWorld, blockX, blockY, blockZ, sideHit)) {
+						renderMouseToolTip("/gui/mouseR.png", "Place");
+					}
+				}
+
+				renderMouseToolTip("/gui/mouseL.png", "Mine");
+			}
 		}
 		if(valid) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/icons.png"));
@@ -172,12 +228,12 @@ public class GuiIngame extends Gui {
 				long var30 = Runtime.getRuntime().freeMemory();
 				long var21 = var29 - var30;
 				var23 = "Used memory: " + var21 * 100L / var24 + "% (" + var21 / 1024L / 1024L + "MB) of " + var24 / 1024L / 1024L + "MB";
-				this.drawString(var8, var23, var6 - var8.getStringWidth(var23) - 2, 2, 14737632);
+				this.drawString(var8, var23, var6 - var8.getStringWidth(var23) - 2, 2, 14737632, 1.0F);
 				var23 = "Allocated memory: " + var29 * 100L / var24 + "% (" + var29 / 1024L / 1024L + "MB)";
-				this.drawString(var8, var23, var6 - var8.getStringWidth(var23) - 2, 12, 14737632);
-				this.drawString(var8, "x: " + this.mc.thePlayer.posX, 2, 64, 14737632);
-				this.drawString(var8, "y: " + this.mc.thePlayer.posY, 2, 72, 14737632);
-				this.drawString(var8, "z: " + this.mc.thePlayer.posZ, 2, 80, 14737632);
+				this.drawString(var8, var23, var6 - var8.getStringWidth(var23) - 2, 12, 14737632, 1.0F);
+				this.drawString(var8, "x: " + this.mc.thePlayer.posX, 2, 64, 14737632, 1.0F);
+				this.drawString(var8, "y: " + this.mc.thePlayer.posY, 2, 72, 14737632, 1.0F);
+				this.drawString(var8, "z: " + this.mc.thePlayer.posZ, 2, 80, 14737632, 1.0F);
 			} else if (this.mc.gameSettings.watermark) {
 				var8.drawStringWithShadow("Minecraft Alpha v1.2.6", 2, 2, 16777215);
 			}

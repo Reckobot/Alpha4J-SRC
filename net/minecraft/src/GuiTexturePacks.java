@@ -153,9 +153,9 @@ public class GuiTexturePacks extends GuiScreen {
 			var16.addVertexWithUV((double)(var10 + var13), (double)var11, 0.0D, 1.0D, 0.0D);
 			var16.addVertexWithUV((double)var10, (double)var11, 0.0D, 0.0D, 0.0D);
 			var16.draw();
-			this.drawString(this.fontRenderer, var9.texturePackFileName, var10 + var13 + 2, var11 + 1, 16777215);
-			this.drawString(this.fontRenderer, var9.firstDescriptionLine, var10 + var13 + 2, var11 + 12, 8421504);
-			this.drawString(this.fontRenderer, var9.secondDescriptionLine, var10 + var13 + 2, var11 + 12 + 10, 8421504);
+			this.drawString(this.fontRenderer, var9.texturePackFileName, var10 + var13 + 2, var11 + 1, 16777215, 1.0F);
+			this.drawString(this.fontRenderer, var9.firstDescriptionLine, var10 + var13 + 2, var11 + 12, 8421504, 1.0F);
+			this.drawString(this.fontRenderer, var9.secondDescriptionLine, var10 + var13 + 2, var11 + 12 + 10, 8421504, 1.0F);
 		}
 
 		byte var18 = 4;

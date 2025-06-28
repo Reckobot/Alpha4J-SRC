@@ -150,7 +150,7 @@ public class GuiScreen extends Gui {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/background.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		float val = this.height;
-		float widthMult = 820F/144F;
+		float widthMult = 4F;
 		tess.startDrawingQuads();
 		tess.addVertexWithUV(0.0D - this.mc.panoramaTimer, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / val + (float)var1));
 		tess.addVertexWithUV((double)this.width * widthMult - this.mc.panoramaTimer, (double)this.height, 0.0D, (double)((float)this.width / val), (double)((float)this.height / val + (float)var1));

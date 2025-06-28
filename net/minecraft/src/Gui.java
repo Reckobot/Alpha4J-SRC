@@ -58,8 +58,8 @@ public class Gui {
 		var1.drawStringWithShadow(var2, var3 - var1.getStringWidth(var2) / 2, var4, var5);
 	}
 
-	public void drawString(FontRenderer var1, String var2, int var3, int var4, int var5) {
-		var1.drawStringWithShadow(var2, var3, var4, var5);
+	public void drawString(FontRenderer var1, String var2, int var3, int var4, int var5, float alpha) {
+		var1.drawStringWithShadowAlpha(var2, var3, var4, var5, alpha);
 	}
 
 	public void drawTexturedModalRect(int var1, int var2, int var3, int var4, int var5, int var6) {

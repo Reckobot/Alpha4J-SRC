@@ -436,7 +436,7 @@ public abstract class Minecraft implements Runnable {
 
 				while(this.running && (this.mcApplet == null || this.mcApplet.isActive())) {
 					if(this.currentScreen != null) {
-						if (this.panoramaTimer < (double) ((this.currentScreen.height) * 820F/144F)) {
+						if (this.panoramaTimer < (double) ((this.currentScreen.height) * 4F)) {
 							this.panoramaTimer += Math.abs(this.prevTick - this.timer.renderPartialTicks)/2.0F;
 						} else {
 							this.panoramaTimer = 0.0D;

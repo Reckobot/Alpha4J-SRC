@@ -41,7 +41,7 @@ public class GameSettings {
 
 	public float gamma = 1.0F;
 	public float opacity = 0.5F;
-	public float offset = 0.24F;
+	public float offset = 0.34F;
 	public boolean watermark = false;
 
 	public GameSettings(Minecraft var1, File var2) {

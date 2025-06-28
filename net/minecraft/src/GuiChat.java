@@ -42,7 +42,7 @@ public class GuiChat extends GuiScreen {
 
 	public void drawScreen(int var1, int var2, float var3) {
 		this.drawRect(2, this.height - 14, this.width - 2, this.height - 2, Integer.MIN_VALUE);
-		this.drawString(this.fontRenderer, "> " + this.message + (this.updateCounter / 6 % 2 == 0 ? "_" : ""), 4, this.height - 12, 14737632);
+		this.drawString(this.fontRenderer, "> " + this.message + (this.updateCounter / 6 % 2 == 0 ? "_" : ""), 4, this.height - 12, 14737632, 1.0F);
 	}
 
 	protected void mouseClicked(int var1, int var2, int var3) {

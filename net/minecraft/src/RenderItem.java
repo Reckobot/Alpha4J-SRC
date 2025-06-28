@@ -106,7 +106,7 @@ public class RenderItem extends Render {
 		if(var3 != null) {
 			if(var3.itemID < 256 && RenderBlocks.func_1219_a(Block.blocksList[var3.itemID].getRenderType())) {
 				int var6 = var3.itemID;
-				var2.bindTexture(var2.getTexture("/terrain.png"));
+				var2.bindTexture(var2.getTextureNoMipmap("/terrain_alt.png"));
 				Block var7 = Block.blocksList[var6];
 				GL11.glPushMatrix();
 				GL11.glTranslatef((float)(var4 - 2), (float)(var5 + 3), 0.0F);
@@ -121,9 +121,9 @@ public class RenderItem extends Render {
 			} else if(var3.getIconIndex() >= 0) {
 				GL11.glDisable(GL11.GL_LIGHTING);
 				if(var3.itemID < 256) {
-					var2.bindTexture(var2.getTexture("/terrain.png"));
+					var2.bindTexture(var2.getTextureNoMipmap("/terrain_alt.png"));
 				} else {
-					var2.bindTexture(var2.getTexture("/gui/items.png"));
+					var2.bindTexture(var2.getTextureNoMipmap("/gui/items.png"));
 				}
 
 				this.renderTexturedQuad(var4, var5, var3.getIconIndex() % 16 * 16, var3.getIconIndex() / 16 * 16, 16, 16);
@@ -141,7 +141,7 @@ public class RenderItem extends Render {
 		if(var3 != null) {
 			if(var3.itemID < 256 && RenderBlocks.func_1219_a(Block.blocksList[var3.itemID].getRenderType())) {
 				int var6 = var3.itemID;
-				var2.bindTexture(var2.getTexture("/terrain.png"));
+				var2.bindTexture(var2.getTextureNoMipmap("/terrain_alt.png"));
 				Block var7 = Block.blocksList[var6];
 				GL11.glPushMatrix();
 				GL11.glTranslatef((float)(var4 - 2), (float)(var5 + 3), 0.0F);
@@ -155,9 +155,9 @@ public class RenderItem extends Render {
 			} else if(var3.getIconIndex() >= 0) {
 				GL11.glDisable(GL11.GL_LIGHTING);
 				if(var3.itemID < 256) {
-					var2.bindTexture(var2.getTexture("/terrain.png"));
+					var2.bindTexture(var2.getTextureNoMipmap("/terrain_alt.png"));
 				} else {
-					var2.bindTexture(var2.getTexture("/gui/items.png"));
+					var2.bindTexture(var2.getTextureNoMipmap("/gui/items.png"));
 				}
 
 				this.renderTexturedQuad(var4, var5, var3.getIconIndex() % 16 * 16, var3.getIconIndex() / 16 * 16, 16, 16);

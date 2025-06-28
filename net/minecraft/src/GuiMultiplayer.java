@@ -78,16 +78,16 @@ public class GuiMultiplayer extends GuiScreen {
 	public void drawScreen(int var1, int var2, float var3) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(this.fontRenderer, "Play Multiplayer", this.width / 2, this.height / 4 - 60 + 20, 16777215);
-		this.drawString(this.fontRenderer, "Minecraft Multiplayer is currently not finished, but there", this.width / 2 - 140, this.height / 4 - 60 + 60 + 0, 10526880);
-		this.drawString(this.fontRenderer, "is some buggy early testing going on.", this.width / 2 - 140, this.height / 4 - 60 + 60 + 9, 10526880);
-		this.drawString(this.fontRenderer, "Enter the IP of a server to connect to it:", this.width / 2 - 140, this.height / 4 - 60 + 60 + 36, 10526880);
+		this.drawString(this.fontRenderer, "Minecraft Multiplayer is currently not finished, but there", this.width / 2 - 140, this.height / 4 - 60 + 60 + 0, 10526880, 1.0F);
+		this.drawString(this.fontRenderer, "is some buggy early testing going on.", this.width / 2 - 140, this.height / 4 - 60 + 60 + 9, 10526880, 1.0F);
+		this.drawString(this.fontRenderer, "Enter the IP of a server to connect to it:", this.width / 2 - 140, this.height / 4 - 60 + 60 + 36, 10526880, 1.0F);
 		int var4 = this.width / 2 - 100;
 		int var5 = this.height / 4 - 10 + 50 + 18;
 		short var6 = 200;
 		byte var7 = 20;
 		this.drawRect(var4 - 1, var5 - 1, var4 + var6 + 1, var5 + var7 + 1, -6250336);
 		this.drawRect(var4, var5, var4 + var6, var5 + var7, -16777216);
-		this.drawString(this.fontRenderer, this.serverAddress + (this.parentScreen / 6 % 2 == 0 ? "_" : ""), var4 + 4, var5 + (var7 - 8) / 2, 14737632);
+		this.drawString(this.fontRenderer, this.serverAddress + (this.parentScreen / 6 % 2 == 0 ? "_" : ""), var4 + 4, var5 + (var7 - 8) / 2, 14737632, 1.0F);
 		super.drawScreen(var1, var2, var3);
 	}
 }
