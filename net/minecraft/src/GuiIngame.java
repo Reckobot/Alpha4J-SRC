@@ -104,33 +104,44 @@ public class GuiIngame extends Gui {
 		this.tooltipX = 0;
 		if(valid && this.mc.gameSettings.tooltipsEnabled) {
 			renderToolTip(this.mc.gameSettings.getKeyBinding(7).toUpperCase().substring(11), "Inventory", 76);
+			ItemStack itm = this.mc.thePlayer.inventory.getCurrentItem();
+
+			boolean doneMouseL = false;
+			boolean doneMouseR = false;
 
 			if(this.mc.objectMouseOver != null) {
 				int blockX = this.mc.objectMouseOver.blockX;
 				int blockY = this.mc.objectMouseOver.blockY;
 				int blockZ = this.mc.objectMouseOver.blockZ;
 				int sideHit = this.mc.objectMouseOver.sideHit;
-				ItemStack itm = this.mc.thePlayer.inventory.getCurrentItem();
 				if (Block.blocksList[this.mc.theWorld.getBlockId(blockX, blockY, blockZ)].isInteractive()) {
 					renderMouseToolTip("/gui/mouseR.png", "Interact", 64);
+					doneMouseR = true;
 				} else if (itm != null && itm.getItem().isBlock()) {
 					renderMouseToolTip("/gui/mouseR.png", "Place", 48);
 				}
+			}
 
-				if(this.mc.objectMouseOver.entityHit != null) {
+			if(itm != null && !doneMouseR) {
+				if (itm.getItem().isFood()) {
+					renderMouseToolTip("/gui/mouseR.png", "Consume", 64);
+					doneMouseR = true;
+				}
+			}
+
+			if (this.mc.objectMouseOver != null) {
+				int blockX = this.mc.objectMouseOver.blockX;
+				int blockY = this.mc.objectMouseOver.blockY;
+				int blockZ = this.mc.objectMouseOver.blockZ;
+				int sideHit = this.mc.objectMouseOver.sideHit;
+				if (this.mc.objectMouseOver.entityHit != null) {
 					renderMouseToolTip("/gui/mouseL.png", "Attack", 36);
-				} else if(itm == null || itm.getItem().onItemUseTest(itm, this.mc.thePlayer, this.mc.theWorld, blockX, blockY, blockZ, sideHit)) {
+				} else if (itm == null || itm.getItem().onItemUseTest(itm, this.mc.thePlayer, this.mc.theWorld, blockX, blockY, blockZ, sideHit)) {
 					renderMouseToolTip("/gui/mouseL.png", "Mine", 24);
-				} else if(itm.getMaxStackSize() <= 1) {
+				} else if (itm.getMaxStackSize() <= 1) {
 					renderMouseToolTip("/gui/mouseL.png", "Use", 24);
 				} else {
 					renderMouseToolTip("/gui/mouseL.png", "Mine", 24);
-				}
-			}
-			ItemStack itm = this.mc.thePlayer.inventory.getCurrentItem();
-			if(itm != null) {
-				if (itm.getItem().healAmount != 0) {
-					renderMouseToolTip("/gui/mouseR.png", "Consume", 64);
 				}
 			}
 		}

@@ -185,4 +185,8 @@ public class Item {
 	public boolean isBlock() {
 		return false;
 	}
+
+    public boolean isFood() {
+		return false;
+    }
 }
