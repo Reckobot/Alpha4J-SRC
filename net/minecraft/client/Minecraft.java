@@ -1,17 +1,20 @@
 package net.minecraft.client;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import net.minecraft.src.*;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
@@ -19,19 +22,11 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.glu.GLU;
 
-import javax.imageio.ImageIO;
-
-import static jdk.jfr.internal.SecuritySupport.getResourceAsStream;
 import static org.lwjgl.opengl.GL14.glBlendColor;
 
 public abstract class Minecraft implements Runnable {
-	private final Frame frame;
-	private int previousWidth;
-	private int previousHeight;
-
 	public PlayerController field_6327_b;
 	private boolean a = false;
 	public int displayWidth;
@@ -89,8 +84,6 @@ public abstract class Minecraft implements Runnable {
 	public int uiToggle = 0;
 	public boolean f3Enabled = false;
 
-	public boolean fullscreen = false;
-
 	public Minecraft(Component var1, Canvas var2, MinecraftApplet var3, int var4, int var5, boolean var6) {
 		this.field_9236_T = var4;
 		this.field_9235_U = var5;
@@ -101,10 +94,6 @@ public abstract class Minecraft implements Runnable {
 		this.displayWidth = var4;
 		this.displayHeight = var5;
 		this.a = var6;
-
-		this.previousWidth = var4;
-		this.previousHeight = var5;
-		this.frame = new Frame("Minecraft");
 	}
 
 	public abstract void func_4007_a(UnexpectedThrowable var1);
@@ -115,7 +104,6 @@ public abstract class Minecraft implements Runnable {
 	}
 
 	public void startGame() throws LWJGLException {
-		Display.setResizable(true);
 		if(this.mcCanvas != null) {
 			Graphics var1 = this.mcCanvas.getGraphics();
 			if(var1 != null) {
@@ -214,56 +202,6 @@ public abstract class Minecraft implements Runnable {
 			this.displayGuiScreen(new GuiMainMenu());
 		}
 
-		ByteBuffer[] icons = new ByteBuffer[2];
-		try {
-			icons[0] = loadIcon("/assets/gambac/icons/16.png");
-			icons[1] = loadIcon("/assets/gambac/icons/32.png");
-		} catch (Exception ignored) {
-		}
-
-		if(icons[0] != null && icons[1] != null){
-			Display.setIcon(icons);
-		}
-
-		try {
-			Display.makeCurrent();
-			Display.update();
-		} catch (LWJGLException e) {
-			System.err.println("Error while making the Display current");
-			//noinspection CallToPrintStackTrace
-			e.printStackTrace();
-		}
-
-	}
-
-	private ByteBuffer loadIcon(String path) {
-		try {
-			InputStream stream = this.getClass().getResourceAsStream(path);
-			if (stream == null) {
-				throw new RuntimeException("Icon resource not found: " + path);
-			}
-			BufferedImage image = ImageIO.read(stream);
-
-			int[] pixels = new int[image.getWidth() * image.getHeight()];
-			image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-
-			ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
-
-			for (int y = 0; y < image.getHeight(); y++) {
-				for (int x = 0; x < image.getWidth(); x++) {
-					int pixel = pixels[y * image.getWidth() + x];
-					buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red
-					buffer.put((byte) ((pixel >> 8) & 0xFF));  // Green
-					buffer.put((byte) (pixel & 0xFF));         // Blue
-					buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha
-				}
-			}
-
-			buffer.flip();
-			return buffer;
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	private void loadScreen() throws LWJGLException {
@@ -819,39 +757,57 @@ public abstract class Minecraft implements Runnable {
 
 	public void toggleFullscreen() {
 		try {
-			this.fullscreen = !this.fullscreen;
-
-			if (this.fullscreen) {
-				this.previousWidth = Display.getWidth();
-				this.previousHeight = Display.getHeight();
-
+			this.a = !this.a;
+			System.out.println("Toggle fullscreen!");
+			if(this.a) {
 				Display.setDisplayMode(Display.getDesktopDisplayMode());
 				this.displayWidth = Display.getDisplayMode().getWidth();
 				this.displayHeight = Display.getDisplayMode().getHeight();
+				if(this.displayWidth <= 0) {
+					this.displayWidth = 1;
+				}
+
+				if(this.displayHeight <= 0) {
+					this.displayHeight = 1;
+				}
 			} else {
-				this.displayWidth = this.previousWidth;
-				this.displayHeight = this.previousHeight;
-				Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
+				if(this.mcCanvas != null) {
+					this.displayWidth = this.mcCanvas.getWidth();
+					this.displayHeight = this.mcCanvas.getHeight();
+				} else {
+					this.displayWidth = this.field_9236_T;
+					this.displayHeight = this.field_9235_U;
+				}
+
+				if(this.displayWidth <= 0) {
+					this.displayWidth = 1;
+				}
+
+				if(this.displayHeight <= 0) {
+					this.displayHeight = 1;
+				}
+
+				Display.setDisplayMode(new DisplayMode(this.field_9236_T, this.field_9235_U));
 			}
 
-			if (this.displayWidth <= 0) {
-				this.displayWidth = 1;
+			this.func_6273_f();
+			Display.setFullscreen(this.a);
+			Display.update();
+			Thread.sleep(1000L);
+			if(this.a) {
+				this.func_6259_e();
 			}
 
-			if (this.displayHeight <= 0) {
-				this.displayHeight = 1;
-			}
-
-			if (this.currentScreen != null) {
+			if(this.currentScreen != null) {
+				this.func_6273_f();
 				this.resize(this.displayWidth, this.displayHeight);
 			}
 
-			Display.setFullscreen(this.fullscreen);
-			Display.update();
-		} catch (Exception e) {
-			//noinspection CallToPrintStackTrace
-			e.printStackTrace();
+			System.out.println("Size: " + this.displayWidth + ", " + this.displayHeight);
+		} catch (Exception var2) {
+			var2.printStackTrace();
 		}
+
 	}
 
 	private void resize(int var1, int var2) {
@@ -931,14 +887,6 @@ public abstract class Minecraft implements Runnable {
 	public double panoramaTimer = 0.0;
 
 	public void runTick() throws IOException {
-		if (GL11.glGetString(GL11.GL_RENDERER).contains("Apple M")) {
-			GL11.glEnable(GL30.GL_FRAMEBUFFER_SRGB);
-		}
-
-		if (Display.getWidth() != this.displayWidth || Display.getHeight() != this.displayHeight) {
-			this.resize(Display.getWidth(), Display.getHeight());
-		}
-
 		this.ingameGUI.func_555_a();
 		this.field_9243_r.func_910_a(1.0F);
 		if(this.thePlayer != null) {

@@ -1,7 +1,7 @@
 package net.minecraft.src;
 
 public class ItemFood extends Item {
-	private final int healAmount;
+	public int healAmount;
 
 	public ItemFood(int var1, int var2) {
 		super(var1);
