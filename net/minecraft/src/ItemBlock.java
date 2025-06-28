@@ -9,6 +9,10 @@ public class ItemBlock extends Item {
 		this.setIconIndex(Block.blocksList[var1 + 256].getBlockTextureFromSide(2));
 	}
 
+	public boolean isBlock() {
+		return true;
+	}
+
 	public boolean onItemUse(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7) {
 		if(var3.getBlockId(var4, var5, var6) == Block.snow.blockID) {
 			var7 = 0;

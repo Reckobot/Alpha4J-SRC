@@ -219,88 +219,92 @@ public class RenderEngine {
 	}
 
 	public void setupTextureMipMap(BufferedImage var1, int var2) {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, var2);
+		if(this.options.mipmapping) {
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, var2);
 
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 
-		int var3 = var1.getWidth();
-		int var4 = var1.getHeight();
-		int[] var5 = new int[var3 * var4];
-		byte[] var6 = new byte[var3 * var4 * 4];
-		var1.getRGB(0, 0, var3, var4, var5, 0, var3);
+			int var3 = var1.getWidth();
+			int var4 = var1.getHeight();
+			int[] var5 = new int[var3 * var4];
+			byte[] var6 = new byte[var3 * var4 * 4];
+			var1.getRGB(0, 0, var3, var4, var5, 0, var3);
 
-		int var7;
-		int var8;
-		int var9;
-		int var10;
-		int var11;
-		int var12;
-		int var13;
-		int var14;
-		for(var7 = 0; var7 < var5.length; ++var7) {
-			var8 = var5[var7] >> 24 & 255;
-			var9 = var5[var7] >> 16 & 255;
-			var10 = var5[var7] >> 8 & 255;
-			var11 = var5[var7] & 255;
-			if(this.options != null && this.options.anaglyph) {
-				var12 = (var9 * 30 + var10 * 59 + var11 * 11) / 100;
-				var13 = (var9 * 30 + var10 * 70) / 100;
-				var14 = (var9 * 30 + var11 * 70) / 100;
-				var9 = var12;
-				var10 = var13;
-				var11 = var14;
-			}
-
-			int dividend = 1;
-			if(var9 == 0 && var10 == 0 && var11 == 0) {
-				var9 = 68;
-				var10 = 54;
-				var11 = 32;
-
-				int width = var4;
-
-				for(int i = -164; i <= 164; i+=width) {
-					int r = var5[var7+i] >> 16 & 255;
-					int g = var5[var7+i] >> 8 & 255;
-					int b = var5[var7+i] & 255;
-
-					if(!(r == 0 && g == 0 && b == 0)) {
-						var9 += r;
-						var10 += g;
-						var11 += b;
-						dividend++;
-					}
+			int var7;
+			int var8;
+			int var9;
+			int var10;
+			int var11;
+			int var12;
+			int var13;
+			int var14;
+			for(var7 = 0; var7 < var5.length; ++var7) {
+				var8 = var5[var7] >> 24 & 255;
+				var9 = var5[var7] >> 16 & 255;
+				var10 = var5[var7] >> 8 & 255;
+				var11 = var5[var7] & 255;
+				if(this.options != null && this.options.anaglyph) {
+					var12 = (var9 * 30 + var10 * 59 + var11 * 11) / 100;
+					var13 = (var9 * 30 + var10 * 70) / 100;
+					var14 = (var9 * 30 + var11 * 70) / 100;
+					var9 = var12;
+					var10 = var13;
+					var11 = var14;
 				}
 
-				var9 /= dividend;
-				var10 /= dividend;
-				var11 /= dividend;
+				int dividend = 1;
+				if(var9 == 0 && var10 == 0 && var11 == 0) {
+					var9 = 68;
+					var10 = 54;
+					var11 = 32;
+
+					int width = var4;
+
+					for(int i = -164; i <= 164; i+=width) {
+						int r = var5[var7+i] >> 16 & 255;
+						int g = var5[var7+i] >> 8 & 255;
+						int b = var5[var7+i] & 255;
+
+						if(!(r == 0 && g == 0 && b == 0)) {
+							var9 += r;
+							var10 += g;
+							var11 += b;
+							dividend++;
+						}
+					}
+
+					var9 /= dividend;
+					var10 /= dividend;
+					var11 /= dividend;
+				}
+
+				var6[var7 * 4 + 0] = (byte)var9;
+				var6[var7 * 4 + 1] = (byte)var10;
+				var6[var7 * 4 + 2] = (byte)var11;
+				var6[var7 * 4 + 3] = (byte)var8;
 			}
 
-			var6[var7 * 4 + 0] = (byte)var9;
-			var6[var7 * 4 + 1] = (byte)var10;
-			var6[var7 * 4 + 2] = (byte)var11;
-			var6[var7 * 4 + 3] = (byte)var8;
+			this.imageData.clear();
+			this.imageData.put(var6);
+			this.imageData.position(0).limit(var6.length);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, var3, var4, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)this.imageData);
+
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 1.0F);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 1);
+
+			GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, GL11.GL_RGBA, var1.getWidth(), var1.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
+		} else {
+			setupTexture(var1, var2);
 		}
-
-		this.imageData.clear();
-		this.imageData.put(var6);
-		this.imageData.position(0).limit(var6.length);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, var3, var4, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)this.imageData);
-
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-
-		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 1.25F);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 1);
-
-		GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, GL11.GL_RGBA, var1.getWidth(), var1.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
 	}
 
 	public void deleteTexture(int var1) {

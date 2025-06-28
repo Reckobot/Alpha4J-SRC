@@ -490,4 +490,8 @@ public class Block {
 		}
 
 	}
+
+	public boolean isInteractive() {
+		return false;
+	}
 }

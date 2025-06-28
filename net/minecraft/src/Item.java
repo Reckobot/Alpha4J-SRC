@@ -108,6 +108,8 @@ public class Item {
 	protected int iconIndex;
 	protected boolean bFull3D = false;
 
+	public int healAmount = 0;
+
 	protected Item(int var1) {
 		this.shiftedIndex = 256 + var1;
 		if(itemsList[256 + var1] != null) {
@@ -177,6 +179,10 @@ public class Item {
 	}
 
 	public boolean shouldRotateAroundWhenRendering() {
+		return false;
+	}
+
+	public boolean isBlock() {
 		return false;
 	}
 }

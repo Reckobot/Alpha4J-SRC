@@ -6,6 +6,10 @@ public abstract class BlockContainer extends Block {
 		isBlockContainer[var1] = true;
 	}
 
+	public boolean isInteractive() {
+		return true;
+	}
+
 	protected BlockContainer(int var1, int var2, Material var3) {
 		super(var1, var2, var3);
 	}

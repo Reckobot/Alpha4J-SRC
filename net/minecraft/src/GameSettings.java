@@ -34,7 +34,7 @@ public class GameSettings {
 	public KeyBinding[] keyBindings = new KeyBinding[]{this.keyBindForward, this.keyBindLeft, this.keyBindBack, this.keyBindRight, this.keyBindJump, this.keyBindSneak, this.keyBindDrop, this.keyBindInventory, this.keyBindChat, this.keyBindToggleFog};
 	protected Minecraft mc;
 	private File optionsFile;
-	public int numberOfOptions = 14;
+	public int numberOfOptions = 16;
 	public int difficulty = 2;
 	public boolean thirdPersonView = false;
 	public String field_12259_z = "";
@@ -43,6 +43,8 @@ public class GameSettings {
 	public float opacity = 0.5F;
 	public float offset = 0.34F;
 	public boolean watermark = false;
+	public boolean tooltipsEnabled = true;
+	public boolean mipmapping = true;
 
 	public GameSettings(Minecraft var1, File var2) {
 		this.mc = var1;
@@ -126,6 +128,14 @@ public class GameSettings {
 			this.watermark = !this.watermark;
 		}
 
+		if(var1 == 14) {
+			this.tooltipsEnabled = !this.tooltipsEnabled;
+		}
+
+		if(var1 == 15) {
+			this.mipmapping = !this.mipmapping;
+		}
+
 		this.saveOptions();
 	}
 
@@ -138,7 +148,7 @@ public class GameSettings {
 	}
 
 	public String getOptionDisplayString(int var1) {
-		return var1 == 13 ? "Alpha watermark: " + (this.watermark ? "ON" : "OFF") : (var1 == 12 ? "Interface offset: " + ((int)(this.offset * 100.0F)) : (var1 == 11 ? "Interface opacity: " + ((int)(this.opacity * 100.0F) + "%") : (var1 == 10 ? "Gamma: " + ((int)(this.gamma * 100.0F) + "%") : (var1 == 0 ? "Music: " + (this.musicVolume > 0.0F ? (int)(this.musicVolume * 100.0F) + "%" : "OFF") : (var1 == 1 ? "Sound: " + (this.soundVolume > 0.0F ? (int)(this.soundVolume * 100.0F) + "%" : "OFF") : (var1 == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (var1 == 3 ? (this.mouseSensitivity == 0.0F ? "Sensitivity: *yawn*" : (this.mouseSensitivity == 1.0F ? "Sensitivity: HYPERSPEED!!!" : "Sensitivity: " + (int)(this.mouseSensitivity * 200.0F) + "%")) : (var1 == 4 ? "Render distance: " + RENDER_DISTANCES[this.renderDistance] : (var1 == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (var1 == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (var1 == 7 ? "Limit framerate: " + (this.limitFramerate ? "ON" : "OFF") : (var1 == 8 ? "Difficulty: " + DIFFICULTY_LEVELS[this.difficulty] : (var1 == 9 ? "Graphics: " + (this.fancyGraphics ? "FANCY" : "FAST") : "")))))))))))));
+		return var1 == 15 ? "Mipmapping: " + (this.mipmapping ? "ON" : "OFF") : (var1 == 14 ? "Tooltips: " + (this.tooltipsEnabled ? "ON" : "OFF") : (var1 == 13 ? "Alpha watermark: " + (this.watermark ? "ON" : "OFF") : (var1 == 12 ? "Interface offset: " + ((int)(this.offset * 100.0F)) : (var1 == 11 ? "Interface opacity: " + ((int)(this.opacity * 100.0F) + "%") : (var1 == 10 ? "Gamma: " + ((int)(this.gamma * 100.0F) + "%") : (var1 == 0 ? "Music: " + (this.musicVolume > 0.0F ? (int)(this.musicVolume * 100.0F) + "%" : "OFF") : (var1 == 1 ? "Sound: " + (this.soundVolume > 0.0F ? (int)(this.soundVolume * 100.0F) + "%" : "OFF") : (var1 == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (var1 == 3 ? (this.mouseSensitivity == 0.0F ? "Sensitivity: *yawn*" : (this.mouseSensitivity == 1.0F ? "Sensitivity: HYPERSPEED!!!" : "Sensitivity: " + (int)(this.mouseSensitivity * 200.0F) + "%")) : (var1 == 4 ? "Render distance: " + RENDER_DISTANCES[this.renderDistance] : (var1 == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (var1 == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (var1 == 7 ? "Limit framerate: " + (this.limitFramerate ? "ON" : "OFF") : (var1 == 8 ? "Difficulty: " + DIFFICULTY_LEVELS[this.difficulty] : (var1 == 9 ? "Graphics: " + (this.fancyGraphics ? "FANCY" : "FAST") : "")))))))))))))));
 	}
 
 	public void loadOptions() {
@@ -222,6 +232,14 @@ public class GameSettings {
 					this.watermark = var3[1].equals("true");
 				}
 
+				if(var3[0].equals("tooltipsEnabled")) {
+					this.tooltipsEnabled = var3[1].equals("true");
+				}
+
+				if(var3[0].equals("mipmapping")) {
+					this.mipmapping = var3[1].equals("true");
+				}
+
 				for(int var4 = 0; var4 < this.keyBindings.length; ++var4) {
 					if(var3[0].equals("key_" + this.keyBindings[var4].keyDescription)) {
 						this.keyBindings[var4].keyCode = Integer.parseInt(var3[1]);
@@ -258,6 +276,8 @@ public class GameSettings {
 			var1.println("opacity:" + this.opacity);
 			var1.println("offset:" + this.offset);
 			var1.println("watermark:" + this.watermark);
+			var1.println("tooltipsEnabled" + this.tooltipsEnabled);
+			var1.println("mipmapping:" + this.mipmapping);
 
 			for(int var2 = 0; var2 < this.keyBindings.length; ++var2) {
 				var1.println("key_" + this.keyBindings[var2].keyDescription + ":" + this.keyBindings[var2].keyCode);

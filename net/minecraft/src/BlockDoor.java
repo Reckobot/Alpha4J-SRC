@@ -192,4 +192,8 @@ public class BlockDoor extends Block {
 	public boolean canPlaceBlockAt(World var1, int var2, int var3, int var4) {
 		return var3 >= 127 ? false : var1.isBlockOpaqueCube(var2, var3 - 1, var4) && super.canPlaceBlockAt(var1, var2, var3, var4) && super.canPlaceBlockAt(var1, var2, var3 + 1, var4);
 	}
+
+	public boolean isInteractive() {
+		return true;
+	}
 }

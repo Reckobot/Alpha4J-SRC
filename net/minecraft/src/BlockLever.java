@@ -197,4 +197,8 @@ public class BlockLever extends Block {
 	public boolean canProvidePower() {
 		return true;
 	}
+
+	public boolean isInteractive() {
+		return true;
+	}
 }

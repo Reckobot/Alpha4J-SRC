@@ -31,7 +31,7 @@ public class GuiIngame extends Gui {
 		this.mc = var1;
 	}
 
-	public void renderToolTip(String key, String text) {
+	public void renderToolTip(String key, String text, int length) {
 		float scale = 0.75F;
 		GL11.glScalef(scale, scale, scale);
 		ScaledResolution var5 = new ScaledResolution(this.mc.displayWidth, this.mc.displayHeight);
@@ -44,12 +44,12 @@ public class GuiIngame extends Gui {
 		this.drawString(this.mc.fontRenderer, key, ((int)(24*(1F/scale)) + tooltipX) + 5, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
 		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 20, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
 
-		tooltipX += (text.length()*8) + 6;
+		tooltipX += length;
 
 		GL11.glScalef(1F/scale, 1F/scale, 1F/scale);
 	}
 
-	public void renderMouseToolTip(String tex, String text) {
+	public void renderMouseToolTip(String tex, String text, int length) {
 		float scale = 0.75F;
 		GL11.glScalef(scale, scale, scale);
 		ScaledResolution var5 = new ScaledResolution(this.mc.displayWidth, this.mc.displayHeight);
@@ -61,7 +61,7 @@ public class GuiIngame extends Gui {
 
 		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 18, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
 
-		tooltipX += (text.length()*8) + 20;
+		tooltipX += length;
 
 		GL11.glScalef(1F/scale, 1F/scale, 1F/scale);
 	}
@@ -102,8 +102,8 @@ public class GuiIngame extends Gui {
 			this.drawTexturedModalRect(var6 / 2 - 91 - 1 + var11.currentItem * 20, var7 - 22 - 1 - (int) (this.mc.gameSettings.offset * 100), 0, 22, 24, 24);
 		}
 		this.tooltipX = 0;
-		if(valid) {
-			renderToolTip("E", "Inventory");
+		if(valid && this.mc.gameSettings.tooltipsEnabled) {
+			renderToolTip(this.mc.gameSettings.getKeyBinding(7).toUpperCase().substring(11), "Inventory", 76);
 
 			if(this.mc.objectMouseOver != null) {
 				int blockX = this.mc.objectMouseOver.blockX;
@@ -111,13 +111,27 @@ public class GuiIngame extends Gui {
 				int blockZ = this.mc.objectMouseOver.blockZ;
 				int sideHit = this.mc.objectMouseOver.sideHit;
 				ItemStack itm = this.mc.thePlayer.inventory.getCurrentItem();
-				if(itm != null) {
-					if (itm.getItem().onItemUseTest(itm, this.mc.thePlayer, this.mc.theWorld, blockX, blockY, blockZ, sideHit)) {
-						renderMouseToolTip("/gui/mouseR.png", "Place");
-					}
+				if (Block.blocksList[this.mc.theWorld.getBlockId(blockX, blockY, blockZ)].isInteractive()) {
+					renderMouseToolTip("/gui/mouseR.png", "Interact", 64);
+				} else if (itm != null && itm.getItem().isBlock()) {
+					renderMouseToolTip("/gui/mouseR.png", "Place", 48);
 				}
 
-				renderMouseToolTip("/gui/mouseL.png", "Mine");
+				if(this.mc.objectMouseOver.entityHit != null) {
+					renderMouseToolTip("/gui/mouseL.png", "Attack", 36);
+				} else if(itm == null || itm.getItem().onItemUseTest(itm, this.mc.thePlayer, this.mc.theWorld, blockX, blockY, blockZ, sideHit)) {
+					renderMouseToolTip("/gui/mouseL.png", "Mine", 24);
+				} else if(itm.getMaxStackSize() <= 1) {
+					renderMouseToolTip("/gui/mouseL.png", "Use", 24);
+				} else {
+					renderMouseToolTip("/gui/mouseL.png", "Mine", 24);
+				}
+			}
+			ItemStack itm = this.mc.thePlayer.inventory.getCurrentItem();
+			if(itm != null) {
+				if (itm.getItem().healAmount != 0) {
+					renderMouseToolTip("/gui/mouseR.png", "Consume", 64);
+				}
 			}
 		}
 		if(valid) {

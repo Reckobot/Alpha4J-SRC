@@ -14,4 +14,8 @@ public class BlockWorkbench extends Block {
 		var5.displayWorkbenchGUI();
 		return true;
 	}
+
+	public boolean isInteractive() {
+		return true;
+	}
 }

@@ -233,4 +233,8 @@ public class BlockButton extends Block {
 		float var3 = 2.0F / 16.0F;
 		this.setBlockBounds(0.5F - var1, 0.5F - var2, 0.5F - var3, 0.5F + var1, 0.5F + var2, 0.5F + var3);
 	}
+
+	public boolean isInteractive() {
+		return true;
+	}
 }

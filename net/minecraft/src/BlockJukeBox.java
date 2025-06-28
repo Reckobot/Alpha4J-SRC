@@ -41,4 +41,8 @@ public class BlockJukeBox extends Block {
 			super.dropBlockAsItemWithChance(var1, var2, var3, var4, var5, var6);
 		}
 	}
+
+	public boolean isInteractive() {
+		return true;
+	}
 }
