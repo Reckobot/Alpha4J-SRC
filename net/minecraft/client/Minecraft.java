@@ -435,7 +435,7 @@ public abstract class Minecraft implements Runnable {
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.5F);
+		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.55F);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		Tessellator tess = Tessellator.instance;
 		tess.startDrawingQuads();
@@ -458,7 +458,7 @@ public abstract class Minecraft implements Runnable {
 		GL11.glDepthMask(false);
 		float gamma = this.gameSettings.gamma*0.6F/4F;
 
-		glBlendColor(1.0F, 1.0F, 1.0F, 0.95F);
+		glBlendColor(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_CONSTANT_ALPHA);
 		GL11.glColor4f(gamma, gamma, gamma, this.gameSettings.gamma);
@@ -579,7 +579,7 @@ public abstract class Minecraft implements Runnable {
 
 					Thread.yield();
 					this.gammaOverlay1();
-					for(int i = 0; i < 6; i++) {
+					for(int i = 0; i < 4; i++) {
 						this.gammaOverlay2();
 					}
 					if(Keyboard.isKeyDown(Keyboard.KEY_F7)) {

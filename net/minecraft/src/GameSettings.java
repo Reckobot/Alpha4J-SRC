@@ -40,7 +40,7 @@ public class GameSettings {
 	public String field_12259_z = "";
 
 	public float gamma = 1.0F;
-	public float opacity = 0.6F;
+	public float opacity = 0.5F;
 	public float offset = 0.34F;
 	public boolean watermark = false;
 	public boolean tooltipsEnabled = true;
