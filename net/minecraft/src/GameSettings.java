@@ -39,8 +39,8 @@ public class GameSettings {
 	public boolean thirdPersonView = false;
 	public String field_12259_z = "";
 
-	public float gamma = 0.0F;
-	public float opacity = 1.0F;
+	public float gamma = 1.0F;
+	public float opacity = 0.6F;
 	public float offset = 0.30F;
 	public boolean watermark = false;
 	public boolean tooltipsEnabled = true;

@@ -254,7 +254,7 @@ public class RenderEngine {
 				}
 
 				int dividend = 1;
-				if(var9 == 0 && var10 == 0 && var11 == 0) {
+				if((var9 == 0 && var10 == 0 && var11 == 0)&&(var8 == 0)) {
 					var9 = 68;
 					var10 = 54;
 					var11 = 32;
