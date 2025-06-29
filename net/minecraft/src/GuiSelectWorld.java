@@ -56,7 +56,7 @@ public class GuiSelectWorld extends GuiScreen {
 		this.controlList.add(new GuiButton(6, this.width / 2 - 100, this.height - 34, "Cancel"));
 	}
 
-	protected void actionPerformed(GuiButton var1) throws IOException {
+	protected void actionPerformed(GuiButton var1) throws IOException, InterruptedException {
 		if(var1.enabled) {
 			if(var1.id < 5) {
 				this.selectWorld(var1.id + 1);
@@ -69,14 +69,18 @@ public class GuiSelectWorld extends GuiScreen {
 		}
 	}
 
-	public void selectWorld(int var1) throws IOException {
+	public void selectWorld(int var1) throws IOException, InterruptedException {
 		this.mc.displayGuiScreen((GuiScreen)null);
 		if(!this.selected) {
+			Thread.sleep(100L);
+
 			if(var1 == 0) {
 				if(World.func_629_a(Minecraft.getMinecraftDir(), "World0") == null) {
 					this.mc.unzip("/tutorial.zip", Minecraft.getMinecraftDir().getAbsolutePath() + "/saves/World0");
 				}
 			}
+
+			Thread.sleep(100L);
 
 			this.selected = true;
 			this.mc.field_6327_b = new PlayerControllerSP(this.mc);

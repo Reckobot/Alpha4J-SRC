@@ -82,7 +82,7 @@ public class GuiMainMenu extends GuiScreen {
 
 	}
 
-	protected void actionPerformed(GuiButton var1) throws IOException {
+	protected void actionPerformed(GuiButton var1) throws IOException, InterruptedException {
 		if(var1.id == 0) {
 			this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
 		}
@@ -100,9 +100,13 @@ public class GuiMainMenu extends GuiScreen {
 		}
 
 		if(var1.id == 4) {
+			Thread.sleep(100L);
+
 			if(World.func_629_a(Minecraft.getMinecraftDir(), "World0") == null) {
 				this.mc.unzip("/tutorial.zip", Minecraft.getMinecraftDir().getAbsolutePath() + "/saves/World0");
 			}
+
+			Thread.sleep(100L);
 
 			this.mc.field_6327_b = new PlayerControllerSP(this.mc);
 			this.mc.func_6247_b("World0");

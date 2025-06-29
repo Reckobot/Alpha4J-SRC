@@ -49,7 +49,7 @@ public class GuiScreen extends Gui {
 		return null;
 	}
 
-	protected void mouseClicked(int var1, int var2, int var3) throws IOException {
+	protected void mouseClicked(int var1, int var2, int var3) throws IOException, InterruptedException {
 		if(var3 == 0) {
 			for(int var4 = 0; var4 < this.controlList.size(); ++var4) {
 				GuiButton var5 = (GuiButton)this.controlList.get(var4);
@@ -71,7 +71,7 @@ public class GuiScreen extends Gui {
 
 	}
 
-	protected void actionPerformed(GuiButton var1) throws IOException {
+	protected void actionPerformed(GuiButton var1) throws IOException, InterruptedException {
 	}
 
 	public void setWorldAndResolution(Minecraft var1, int var2, int var3) {
@@ -86,7 +86,7 @@ public class GuiScreen extends Gui {
 	public void initGui() {
 	}
 
-	public void handleInput() throws IOException {
+	public void handleInput() throws IOException, InterruptedException {
 		while(Mouse.next()) {
 			this.handleMouseInput();
 		}
@@ -97,7 +97,7 @@ public class GuiScreen extends Gui {
 
 	}
 
-	public void handleMouseInput() throws IOException {
+	public void handleMouseInput() throws IOException, InterruptedException {
 		int var1;
 		int var2;
 		if(Mouse.getEventButtonState()) {

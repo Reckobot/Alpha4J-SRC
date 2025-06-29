@@ -47,7 +47,7 @@ public class GuiTexturePacks extends GuiScreen {
 		}
 	}
 
-	protected void mouseClicked(int var1, int var2, int var3) throws IOException {
+	protected void mouseClicked(int var1, int var2, int var3) throws IOException, InterruptedException {
 		super.mouseClicked(var1, var2, var3);
 	}
 

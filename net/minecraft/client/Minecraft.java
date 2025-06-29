@@ -373,7 +373,7 @@ public abstract class Minecraft implements Runnable {
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.5F);
+		GL11.glColor4f(0.2F, 0.2F, 0.2F, this.gameSettings.gamma*0.55F);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		Tessellator tess = Tessellator.instance;
 		tess.startDrawingQuads();
@@ -886,7 +886,7 @@ public abstract class Minecraft implements Runnable {
 
 	public double panoramaTimer = 0.0;
 
-	public void runTick() throws IOException {
+	public void runTick() throws IOException, InterruptedException {
 		this.ingameGUI.func_555_a();
 		this.field_9243_r.func_910_a(1.0F);
 		if(this.thePlayer != null) {
