@@ -39,10 +39,10 @@ public class GuiIngame extends Gui {
 		int var7 = var5.getScaledHeight();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, this.opacity);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/key.png"));
-		this.drawTexturedModalRect((int)(24*(1F/scale))+tooltipX, (int)((var7 - 32)*(1F/scale)), 0, 0, 16, 16);
+		this.drawTexturedModalRect((int)(24*(1F/scale))+tooltipX, (int)((var7 - 24)*(1F/scale)), 0, 0, 16, 16);
 
-		this.drawString(this.mc.fontRenderer, key, ((int)(24*(1F/scale)) + tooltipX) + 5, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
-		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 20, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
+		this.drawString(this.mc.fontRenderer, key, ((int)(24*(1F/scale)) + tooltipX) + 5, (int)((var7 - 24)*(1F/scale)) + 4, 16777215, this.opacity);
+		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 20, (int)((var7 - 24)*(1F/scale)) + 4, 16777215, this.opacity);
 
 		tooltipX += length;
 
@@ -57,9 +57,9 @@ public class GuiIngame extends Gui {
 		int var7 = var5.getScaledHeight();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, this.opacity);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture(tex));
-		this.drawTexturedModalRect((int)(24*(1F/scale))+tooltipX, (int)((var7 - 32)*(1F/scale)), 0, 0, 16, 16);
+		this.drawTexturedModalRect((int)(24*(1F/scale))+tooltipX, (int)((var7 - 24)*(1F/scale)), 0, 0, 16, 16);
 
-		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 18, (int)((var7 - 32)*(1F/scale)) + 4, 16777215, this.opacity);
+		this.drawString(this.mc.fontRenderer, text, ((int)(24*(1F/scale)) + tooltipX) + 18, (int)((var7 - 24)*(1F/scale)) + 4, 16777215, this.opacity);
 
 		tooltipX += length;
 

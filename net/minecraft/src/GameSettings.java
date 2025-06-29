@@ -41,7 +41,7 @@ public class GameSettings {
 
 	public float gamma = 0.0F;
 	public float opacity = 1.0F;
-	public float offset = 0.34F;
+	public float offset = 0.30F;
 	public boolean watermark = false;
 	public boolean tooltipsEnabled = true;
 	public boolean mipmapping = true;
