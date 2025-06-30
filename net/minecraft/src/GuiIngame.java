@@ -136,10 +136,6 @@ public class GuiIngame extends Gui {
 				int sideHit = this.mc.objectMouseOver.sideHit;
 				if (this.mc.objectMouseOver.entityHit != null) {
 					renderMouseToolTip("/gui/mouseL.png", "Attack", 36);
-				} else if (itm == null || itm.getItem().onItemUseTest(itm, this.mc.thePlayer, this.mc.theWorld, blockX, blockY, blockZ, sideHit)) {
-					renderMouseToolTip("/gui/mouseL.png", "Mine", 24);
-				} else if (itm.getMaxStackSize() <= 1) {
-					renderMouseToolTip("/gui/mouseL.png", "Use", 24);
 				} else {
 					renderMouseToolTip("/gui/mouseL.png", "Mine", 24);
 				}
