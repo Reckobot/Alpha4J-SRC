@@ -1090,12 +1090,14 @@ public class World implements IBlockAccess {
 
 		var1 &= 15;
 
-		for(var2 &= 15; var4 > 0; --var4) {
-			int var5 = var3.getBlockID(var1, var4, var2);
-			if(var5 != 0 && (Block.blocksList[var5].blockMaterial.func_880_c() || Block.blocksList[var5].blockMaterial.getIsLiquid())) {
-				return var4 + 1;
+		try {
+			for (var2 &= 15; var4 > 0; --var4) {
+				int var5 = var3.getBlockID(var1, var4, var2);
+				if (var5 != 0 && (Block.blocksList[var5].blockMaterial.func_880_c() || Block.blocksList[var5].blockMaterial.getIsLiquid())) {
+					return var4 + 1;
+				}
 			}
-		}
+		} catch (Exception ignore) {}
 
 		return -1;
 	}
